@@ -3,21 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#08060d">
-
-<title>SAMEER — Digital Universe</title>
-
-<meta name="description" content="Explore SAMEER's digital universe. Discover tools, creative projects, business applications and more.">
+<meta name="theme-color" content="#08050e">
+<meta name="description" content="Welcome to SAMEER's digital universe. Explore my websites, tools and creative projects.">
+<title>SAMEER | Digital Universe</title>
 
 <style>
 :root {
-  --bg: #08060d;
-  --card: #120d1d;
+  --bg: #08050e;
+  --panel: #120b1d;
   --purple: #a855f7;
   --pink: #e879f9;
-  --text: #ffffff;
-  --muted: #aaa1b7;
-  --border: rgba(168,85,247,.22);
+  --white: #fff;
+  --muted: #aaa0b8;
+  --border: rgba(168,85,247,.25);
 }
 
 * {
@@ -26,190 +24,221 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
-  min-height: 100vh;
+  color: var(--white);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(100px);
 }
 
 body::before {
-  content: "";
-  position: fixed;
   width: 380px;
   height: 380px;
   top: -180px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(147,51,234,.18);
-  filter: blur(100px);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
+  background: rgba(147,51,234,.2);
 }
 
 body::after {
-  content: "";
-  position: fixed;
-  width: 280px;
-  height: 280px;
-  right: -170px;
+  width: 300px;
+  height: 300px;
+  right: -180px;
   bottom: 5%;
-  background: rgba(192,38,211,.12);
-  filter: blur(90px);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
+  background: rgba(192,38,211,.13);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
 
 .container {
-  width: min(100% - 36px, 1000px);
+  width: min(100% - 32px, 950px);
   margin: auto;
 }
 
-/* HEADER */
+/* HERO /
 
-header {
-  padding: 65px 0 35px;
+.hero {
+  padding: 58px 0 38px;
   text-align: center;
 }
 
-.logo {
-  font-size: clamp(48px, 12vw, 88px);
+.photo-ring {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 25px;
+  padding: 5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0abfc, #9333ea, #4c1d95, #e879f9);
+  box-shadow: 0 0 25px rgba(168,85,247,.4),
+              0 0 65px rgba(168,85,247,.13);
+  animation: ringGlow 3s ease-in-out infinite alternate;
+}
+
+.photo-ring::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border: 1px solid rgba(216,180,254,.35);
+  border-radius: 50%;
+}
+
+.profile-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  border: 4px solid var(--bg);
+  background: #1b1029;
+}
+
+@keyframes ringGlow {
+  from { box-shadow: 0 0 20px rgba(168,85,247,.3); }
+  to { box-shadow: 0 0 38px rgba(192,132,252,.55); }
+}
+
+.eyebrow {
+  color: #d8b4fe;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  font-size: clamp(48px, 11vw, 82px);
+  line-height: 1.1;
   font-weight: 950;
-  letter-spacing: 9px;
-  line-height: 1.2;
-  background: linear-gradient(
-    120deg,
-    #ffffff 10%,
-    #e9c6ff 45%,
-    #a855f7 75%,
-    #f0abfc 100%
-  );
+  letter-spacing: 7px;
+  background: linear-gradient(120deg, #fff, #e9d5ff 40%, #c084fc 70%, #f0abfc);
+  color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 22px rgba(168,85,247,.35));
-  animation: glow 3s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 18px rgba(168,85,247,.25));
 }
 
-@keyframes glow {
-  from {
-    filter: drop-shadow(0 0 10px rgba(168,85,247,.2));
-  }
-  to {
-    filter: drop-shadow(0 0 25px rgba(168,85,247,.55));
-  }
+.hero-description {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+  max-width: 390px;
+  margin: 15px auto 0;
 }
 
-.badge {
+.hero-description strong {
+  color: #e9d5ff;
+  font-weight: 600;
+}
+
+.pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 18px;
-  padding: 8px 14px;
+  margin-top: 21px;
+  padding: 9px 14px;
   border: 1px solid var(--border);
-  background: rgba(168,85,247,.07);
   border-radius: 30px;
+  background: rgba(168,85,247,.07);
   color: #d8b4fe;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1.8px;
 }
 
-.status-dot {
+.pill-dot {
   width: 7px;
   height: 7px;
   background: #c084fc;
   border-radius: 50%;
-  box-shadow: 0 0 12px #a855f7;
+  box-shadow: 0 0 10px #a855f7;
 }
 
-.subtitle {
-  margin: 20px auto 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.8;
-  max-width: 420px;
-}
-
-/* STATS */
+/ STATS /
 
 .stats {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin: 28px 0 35px;
+  margin: 30px 0 45px;
 }
 
 .stat {
-  padding: 12px 23px;
-  background: rgba(255,255,255,.025);
+  min-width: 100px;
+  padding: 13px 20px;
   border: 1px solid var(--border);
-  border-radius: 13px;
-  min-width: 105px;
+  background: rgba(255,255,255,.025);
+  border-radius: 14px;
 }
 
 .stat strong {
   display: block;
-  font-size: 22px;
+  font-size: 23px;
   color: #e9d5ff;
 }
 
 .stat span {
   display: block;
-  margin-top: 5px;
+  margin-top: 4px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
   color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-/* SECTION */
+/ PROJECTS /
 
-.section-head {
+.section-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 20px 0;
+  margin-bottom: 18px;
 }
 
-.section-head h2 {
-  font-size: 19px;
-  letter-spacing: .5px;
+.section-heading h2 {
+  font-size: 21px;
+  font-weight: 750;
 }
 
-.section-head h2 span {
-  color: var(--purple);
-}
+.section-heading h2 span { color: #c084fc; }
 
 .count {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
 }
 
-/* SEARCH */
-
-.search-box {
+.search-wrap {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
-.search-box input {
+.search-wrap span {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #c084fc;
+}
+
+.search-wrap input {
   width: 100%;
-  padding: 16px 18px 16px 46px;
+  padding: 16px 17px 16px 46px;
   background: rgba(255,255,255,.035);
   color: white;
   border: 1px solid var(--border);
@@ -219,181 +248,143 @@ header {
   transition: .25s;
 }
 
-.search-box input:focus {
-  border-color: var(--purple);
-  box-shadow: 0 0 22px rgba(168,85,247,.12);
+.search-wrap input:focus {
+  border-color: #a855f7;
+  box-shadow: 0 0 20px rgba(168,85,247,.12);
 }
 
-.search-box input::placeholder {
-  color: #81768f;
-}
-
-.search-icon {
-  position: absolute;
-  left: 17px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #c084fc;
-}
-
-/* FILTERS */
+.search-wrap input::placeholder { color: #81758e; }
 
 .filters {
   display: flex;
-  gap: 9px;
+  gap: 8px;
   overflow-x: auto;
-  padding: 2px 0 15px;
+  padding: 2px 0 17px;
   scrollbar-width: none;
 }
 
-.filters::-webkit-scrollbar {
-  display: none;
-}
+.filters::-webkit-scrollbar { display: none; }
 
 .filter {
   flex-shrink: 0;
+  padding: 10px 15px;
   border: 1px solid var(--border);
+  border-radius: 30px;
   background: rgba(255,255,255,.025);
   color: #bdb2ca;
-  border-radius: 30px;
-  padding: 10px 15px;
-  font-size: 12px;
+  font-size: 11px;
   cursor: pointer;
-  transition: .25s;
+  transition: .2s;
 }
 
 .filter.active,
 .filter:hover {
+  background: rgba(168,85,247,.18);
   color: white;
-  background: rgba(168,85,247,.17);
-  border-color: var(--purple);
-  box-shadow: 0 0 15px rgba(168,85,247,.1);
+  border-color: #a855f7;
 }
-
-/* WEBSITE GRID */
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 15px;
-  padding: 5px 0 45px;
+  padding: 3px 0 48px;
 }
 
-.site-card {
+.card {
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: 21px;
-  background: linear-gradient(
-    145deg,
-    rgba(27,18,42,.95),
-    rgba(13,10,20,.96)
-  );
+  padding: 20px;
+  overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 19px;
-  overflow: hidden;
-  transition: transform .25s, border-color .25s,
-    box-shadow .25s;
-  animation: appear .5s both;
+  background: linear-gradient(145deg, rgba(29,18,44,.96), rgba(13,9,20,.97));
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+  animation: enter .45s both;
 }
 
-.site-card::before {
+.card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 15%;
   width: 70%;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #c084fc,
-    transparent
-  );
-  opacity: .7;
+  background: linear-gradient(90deg, transparent, #d8b4fe, transparent);
 }
 
-.site-card:hover {
+.card:hover {
   transform: translateY(-5px);
   border-color: rgba(192,132,252,.65);
-  box-shadow: 0 12px 35px rgba(112,40,180,.13);
+  box-shadow: 0 12px 35px rgba(112,40,180,.15);
 }
 
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .card-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 19px;
+  gap: 8px;
+  margin-bottom: 17px;
 }
 
-.site-icon {
-  width: 49px;
-  height: 49px;
+.card-icon {
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
   border-radius: 14px;
-  background: linear-gradient(
-    145deg,
-    rgba(168,85,247,.2),
-    rgba(192,38,211,.06)
-  );
-  border: 1px solid rgba(168,85,247,.22);
+  border: 1px solid rgba(168,85,247,.25);
+  background: linear-gradient(145deg, rgba(168,85,247,.2), rgba(192,38,211,.05));
   color: #e9d5ff;
-  font-size: 23px;
+  font-size: 22px;
 }
 
 .card-number {
-  color: #62516f;
-  font-size: 11px;
+  color: #786386;
+  font-size: 10px;
   letter-spacing: 1px;
 }
 
 .category {
+  margin-bottom: 8px;
   color: #c084fc;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1.1px;
-  margin-bottom: 9px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
 }
 
-.site-card h3 {
-  font-size: 18px;
-  line-height: 1.4;
+.card h3 {
   margin-bottom: 8px;
+  font-size: 17px;
+  line-height: 1.4;
   overflow-wrap: anywhere;
 }
 
-.description {
+.card-description {
+  flex-grow: 1;
+  margin-bottom: 20px;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.7;
-  flex-grow: 1;
-  margin-bottom: 21px;
 }
 
 .visit {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 9px;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
   padding: 12px 10px;
-  background: linear-gradient(100deg, #7e22ce, #a855f7);
   border: 1px solid rgba(216,180,254,.3);
   border-radius: 11px;
+  background: linear-gradient(100deg, #7e22ce, #a855f7);
   color: white;
   font-size: 12px;
   font-weight: 700;
@@ -402,103 +393,63 @@ header {
 
 .visit:hover {
   background: linear-gradient(100deg, #9333ea, #c084fc);
-  box-shadow: 0 0 20px rgba(168,85,247,.3);
+  box-shadow: 0 0 20px rgba(168,85,247,.25);
 }
 
-.arrow {
-  transition: transform .25s;
-}
-
-.visit:hover .arrow {
-  transform: translate(3px, -2px);
-}
+.arrow { transition: transform .2s; }
+.visit:hover .arrow { transform: translate(3px, -2px); }
 
 .empty {
   display: none;
   padding: 35px 10px;
-  text-align: center;
   color: var(--muted);
-  font-size: 14px;
+  text-align: center;
 }
 
-/* FOOTER */
+/ FOOTER */
 
 footer {
+  padding: 27px 0 35px;
   text-align: center;
-  padding: 25px 0 35px;
-  border-top: 1px solid rgba(168,85,247,.13);
+  border-top: 1px solid rgba(168,85,247,.14);
 }
 
-.footer-logo {
-  color: #d8b4fe;
-  font-size: 17px;
+.footer-name {
+  color: #e9d5ff;
   font-weight: 900;
-  letter-spacing: 4px;
-}
-
-footer p {
-  color: #81768f;
-  font-size: 11px;
-  line-height: 1.9;
-  margin-top: 10px;
+  font-size: 18px;
+  letter-spacing: 5px;
 }
 
 .footer-line {
-  width: 45px;
+  width: 42px;
   height: 2px;
-  background: linear-gradient(90deg, #7e22ce, #e879f9);
-  margin: 15px auto;
+  margin: 14px auto;
   border-radius: 10px;
+  background: linear-gradient(90deg, #7e22ce, #e879f9);
 }
 
-/* MOBILE */
+footer p {
+  color: #81758e;
+  font-size: 11px;
+  line-height: 1.9;
+}
 
 @media (max-width: 520px) {
-  .container {
-    width: calc(100% - 28px);
-  }
-
-  header {
-    padding-top: 54px;
-  }
-
-  .logo {
-    letter-spacing: 6px;
-  }
-
-  .grid {
-    gap: 11px;
-  }
-
-  .site-card {
-    padding: 15px;
-    border-radius: 16px;
-  }
-
-  .site-icon {
-    width: 42px;
-    height: 42px;
-    font-size: 20px;
-  }
-
-  .site-card h3 {
-    font-size: 15px;
-  }
-
-  .description {
-    font-size: 11px;
-  }
-
-  .stat {
-    padding: 11px 15px;
-    min-width: 90px;
-  }
+  .container { width: calc(100% - 28px); }
+  .hero { padding-top: 45px; }
+  .photo-ring { width: 132px; height: 132px; }
+  .hero h1 { letter-spacing: 5px; }
+  .grid { gap: 10px; }
+  .card { padding: 14px; border-radius: 16px; }
+  .card-icon { width: 41px; height: 41px; font-size: 19px; }
+  .card h3 { font-size: 15px; }
+  .card-description { font-size: 11px; }
+  .stat { min-width: 87px; padding: 12px 13px; }
 }
 
 @media (max-width: 340px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  .grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -513,57 +464,58 @@ footer p {
 </head>
 
 <body>
-
 <div class="container">
 
-  <header>
-    <h1 class="logo">SAMEER</h1>
-
-    <div class="badge">
-      <span class="status-dot"></span>
-      DIGITAL UNIVERSE
+  <header class="hero">
+    <div class="photo-ring">
+      <img
+        class="profile-photo"
+        src="./74695173-FF59-4FDA-81D6-79D667ECBCE4.png"
+        alt="SAMEER profile photo"
+      >
     </div>
 
-    <p class="subtitle">
-      Ideas turned into digital experiences.<br>
-      Explore my collection of websites, tools and creations.
+    <div class="eyebrow">WELCOME TO MY WORLD</div>
+    <h1>SAMEER</h1>
+
+    <p class="hero-description">
+      Building ideas into reality.<br>
+      <strong>One mind. Multiple creations.</strong>
     </p>
+
+    <div class="pill">
+      <span class="pill-dot"></span>
+      MY DIGITAL UNIVERSE
+    </div>
 
     <div class="stats">
       <div class="stat">
         <strong>10</strong>
         <span>Projects</span>
       </div>
-
       <div class="stat">
         <strong>01</strong>
         <span>Universe</span>
       </div>
-
       <div class="stat">
         <strong>∞</strong>
-        <span>Ideas</span>
+        <span>Possibilities</span>
       </div>
     </div>
   </header>
 
   <main>
-    <div class="section-head">
-      <h2>Explore <span>Projects.</span></h2>
+    <div class="section-heading">
+      <h2>My <span>Projects.</span></h2>
       <span class="count" id="count">10 websites</span>
     </div>
 
-    <div class="search-box">
-      <span class="search-icon">⌕</span>
-      <input
-        type="search"
-        id="search"
-        placeholder="Search my universe..."
-        aria-label="Search websites"
-      >
+    <div class="search-wrap">
+      <span>⌕</span>
+      <input type="search" id="search" placeholder="Find something interesting..." aria-label="Search projects">
     </div>
 
-    <div class="filters" id="filters">
+    <div class="filters">
       <button class="filter active" data-filter="All">All Projects</button>
       <button class="filter" data-filter="Tools">Tools</button>
       <button class="filter" data-filter="Business">Business</button>
@@ -574,216 +526,101 @@ footer p {
 
     <div class="grid" id="grid">
 
-      <article class="site-card"
-        data-name="PDFToolbox"
-        data-category="Tools">
-        <div class="card-top">
-          <div class="site-icon">▤</div>
-          <span class="card-number">01 / 10</span>
-        </div>
+      <article class="card" data-name="PDFToolbox" data-category="Tools">
+        <div class="card-top"><div class="card-icon">▤</div><span class="card-number">01 / 10</span></div>
         <div class="category">TOOLS & UTILITIES</div>
         <h3>PDFToolbox</h3>
-        <p class="description">
-          Your destination for handy PDF tools and document utilities.
-        </p>
-        <a class="visit" href="https://pdftoolbox.shop"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Useful PDF tools and document utilities in one place.</p>
+        <a class="visit" href="https://pdftoolbox.shop" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="Celebrity Buzz"
-        data-category="Entertainment">
-        <div class="card-top">
-          <div class="site-icon">✦</div>
-          <span class="card-number">02 / 10</span>
-        </div>
+      <article class="card" data-name="Celebrity Buzz" data-category="Entertainment">
+        <div class="card-top"><div class="card-icon">✦</div><span class="card-number">02 / 10</span></div>
         <div class="category">ENTERTAINMENT</div>
         <h3>Celebrity Buzz</h3>
-        <p class="description">
-          Celebrity updates, entertainment stories and trending buzz.
-        </p>
-        <a class="visit"
-          href="https://www.celebritybuzz.buzz/?m=1"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Celebrity updates, entertainment stories and trending buzz.</p>
+        <a class="visit" href="https://www.celebritybuzz.buzz/?m=1" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="HisabPro"
-        data-category="Business">
-        <div class="card-top">
-          <div class="site-icon">₹</div>
-          <span class="card-number">03 / 10</span>
-        </div>
-        <div class="category">BUSINESS</div>
+      <article class="card" data-name="HisabPro" data-category="Business">
+        <div class="card-top"><div class="card-icon">₹</div><span class="card-number">03 / 10</span></div>
+        <div class="category">BUSINESS MANAGEMENT</div>
         <h3>HisabPro</h3>
-        <p class="description">
-          A smart business management project for sales, stock and accounts.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/hisabpro/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Manage sales, stock, customer khata and business records.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/hisabpro/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="CalcPro"
-        data-category="Tools">
-        <div class="card-top">
-          <div class="site-icon">±</div>
-          <span class="card-number">04 / 10</span>
-        </div>
+      <article class="card" data-name="CalcPro" data-category="Tools">
+        <div class="card-top"><div class="card-icon">±</div><span class="card-number">04 / 10</span></div>
         <div class="category">TOOLS & UTILITIES</div>
         <h3>CalcPro</h3>
-        <p class="description">
-          A calculator project designed for convenient everyday calculations.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/calcpro/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">A handy calculator project for everyday calculations.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/calcpro/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="LabelPro"
-        data-category="Business">
-        <div class="card-top">
-          <div class="site-icon">▦</div>
-          <span class="card-number">05 / 10</span>
-        </div>
+      <article class="card" data-name="LabelPro" data-category="Business">
+        <div class="card-top"><div class="card-icon">▦</div><span class="card-number">05 / 10</span></div>
         <div class="category">LABEL & BARCODE</div>
         <h3>LabelPro</h3>
-        <p class="description">
-          Create product labels and work with barcode design tools.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/labelpro/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Design product labels and work with barcode tools.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/labelpro/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="SK Player"
-        data-category="Entertainment">
-        <div class="card-top">
-          <div class="site-icon">▷</div>
-          <span class="card-number">06 / 10</span>
-        </div>
-        <div class="category">MEDIA</div>
+      <article class="card" data-name="SK Player" data-category="Entertainment">
+        <div class="card-top"><div class="card-icon">▷</div><span class="card-number">06 / 10</span></div>
+        <div class="category">MEDIA & ENTERTAINMENT</div>
         <h3>SK Player</h3>
-        <p class="description">
-          Explore the SK Player media project.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/skplayer/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Discover the SK Player media project.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/skplayer/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="Vibe Wish"
-        data-category="Creative">
-        <div class="card-top">
-          <div class="site-icon">♡</div>
-          <span class="card-number">07 / 10</span>
-        </div>
-        <div class="category">CREATIVE</div>
+      <article class="card" data-name="Vibe Wish" data-category="Creative">
+        <div class="card-top"><div class="card-icon">♡</div><span class="card-number">07 / 10</span></div>
+        <div class="category">CREATIVE EXPERIENCES</div>
         <h3>Vibe Wish</h3>
-        <p class="description">
-          A creative wishes and greetings website project.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/vibe-wish/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Creative wishes and memorable greeting experiences.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/vibe-wish/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="Universal Restaurant POS"
-        data-category="Business">
-        <div class="card-top">
-          <div class="site-icon">⌘</div>
-          <span class="card-number">08 / 10</span>
-        </div>
-        <div class="category">RESTAURANT MANAGEMENT</div>
+      <article class="card" data-name="Universal Restaurant POS" data-category="Business">
+        <div class="card-top"><div class="card-icon">⌘</div><span class="card-number">08 / 10</span></div>
+        <div class="category">RESTAURANT SOFTWARE</div>
         <h3>Universal Restaurant POS</h3>
-        <p class="description">
-          A restaurant point-of-sale and management software project.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">A restaurant point-of-sale and management project.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="SK Logistics"
-        data-category="Business">
-        <div class="card-top">
-          <div class="site-icon">⇄</div>
-          <span class="card-number">09 / 10</span>
-        </div>
+      <article class="card" data-name="SK Logistics" data-category="Business">
+        <div class="card-top"><div class="card-icon">⇄</div><span class="card-number">09 / 10</span></div>
         <div class="category">TRANSPORT MANAGEMENT</div>
         <h3>SK Logistics</h3>
-        <p class="description">
-          A transport management project for bookings and business tracking.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/sk-logistics/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Transport bookings, logistics and business tracking.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/sk-logistics/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
-      <article class="site-card"
-        data-name="Fastgram"
-        data-category="Social">
-        <div class="card-top">
-          <div class="site-icon">◎</div>
-          <span class="card-number">10 / 10</span>
-        </div>
+      <article class="card" data-name="Fastgram" data-category="Social">
+        <div class="card-top"><div class="card-icon">◎</div><span class="card-number">10 / 10</span></div>
         <div class="category">SOCIAL & DIGITAL</div>
         <h3>Fastgram</h3>
-        <p class="description">
-          Explore the Fastgram digital project.
-        </p>
-        <a class="visit"
-          href="https://sameerkhan86926-a11y.github.io/Fastgram/"
-          target="_blank" rel="noopener noreferrer">
-          Visit Website <span class="arrow">↗</span>
-        </a>
+        <p class="card-description">Explore the Fastgram digital project.</p>
+        <a class="visit" href="https://sameerkhan86926-a11y.github.io/Fastgram/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
       </article>
 
     </div>
 
-    <div class="empty" id="empty">
-      No projects found. Try another search.
-    </div>
+    <div class="empty" id="empty">No projects found. Try another search.</div>
   </main>
 
   <footer>
-    <div class="footer-logo">SAMEER</div>
+    <div class="footer-name">SAMEER</div>
     <div class="footer-line"></div>
-    <p>
-      Built with ideas, creativity and code.<br>
-      © <span id="year"></span> SAMEER. All rights reserved.
-    </p>
+    <p>Ideas into experiences.<br>© <span id="year"></span> SAMEER</p>
   </footer>
-
 </div>
 
 <script>
 const search = document.getElementById("search");
-const cards = [...document.querySelectorAll(".site-card")];
+const cards = [...document.querySelectorAll(".card")];
 const filters = [...document.querySelectorAll(".filter")];
 const count = document.getElementById("count");
 const empty = document.getElementById("empty");
@@ -795,26 +632,16 @@ function updateProjects() {
   let visible = 0;
 
   cards.forEach(card => {
-    const name = card.dataset.name.toLowerCase();
-    const category = card.dataset.category;
-    const text = card.innerText.toLowerCase();
-
-    const matchesSearch =
-      name.includes(query) || text.includes(query);
-
-    const matchesFilter =
-      activeFilter === "All" || category === activeFilter;
-
+    const text = (card.dataset.name + " " + card.innerText).toLowerCase();
+    const matchesSearch = text.includes(query);
+    const matchesFilter = activeFilter === "All" || card.dataset.category === activeFilter;
     const show = matchesSearch && matchesFilter;
 
     card.style.display = show ? "flex" : "none";
-
     if (show) visible++;
   });
 
-  count.textContent =
-    visible + (visible === 1 ? " website" : " websites");
-
+  count.textContent = visible + (visible === 1 ? " website" : " websites");
   empty.style.display = visible === 0 ? "block" : "none";
 }
 
@@ -823,20 +650,18 @@ search.addEventListener("input", updateProjects);
 filters.forEach(button => {
   button.addEventListener("click", () => {
     activeFilter = button.dataset.filter;
-
-    filters.forEach(item => {
-      item.classList.toggle("active", item === button);
-    });
-
+    filters.forEach(item => item.classList.toggle("active", item === button));
     updateProjects();
   });
 });
 
-document.getElementById("year").textContent =
-  new Date().getFullYear();
+document.getElementById("year").textContent = new Date().getFullYear();
+
+document.querySelector(".profile-photo").addEventListener("error", function() {
+  this.alt = "Profile photo could not be loaded";
+});
 
 updateProjects();
 </script>
-
 </body>
 </html>
