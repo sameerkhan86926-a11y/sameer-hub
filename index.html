@@ -120,11 +120,18 @@
       border-radius: 50%;
       background: var(--matrix-green);
       box-shadow: 0 0 8px var(--matrix-green);
+      animation: pulseDot 2s infinite alternate;
+    }
+
+    @keyframes pulseDot {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.2); }
     }
 
     .audio-hud-toggle.muted .audio-dot {
       background: #ef4444;
       box-shadow: 0 0 8px #ef4444;
+      animation: none;
     }
 
     /* Terminal Header */
@@ -799,9 +806,11 @@
   </div>
 
   <script>
-    /* ================= LIVE SOUND SYNTHESIZER (WEB AUDIO API) ================= */
+    /* ================= CONTINUOUS AMBIENT DRONE & SFX SYNTH ================= */
     let audioEnabled = true;
     let audioCtx = null;
+    let droneGain = null;
+    let droneStarted = false;
 
     function initAudio() {
       if (!audioCtx) {
@@ -810,9 +819,64 @@
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
+      if (!droneStarted && audioEnabled) {
+        startAmbientDrone();
+      }
     }
 
-    // Play synthesized cyber tone
+    // Continuous Sci-Fi Ambient Cyber Drone Engine
+    function startAmbientDrone() {
+      if (!audioCtx || droneStarted) return;
+      droneStarted = true;
+
+      try {
+        // Master Drone Gain
+        droneGain = audioCtx.createGain();
+        droneGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        // Smooth fade in
+        droneGain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + 3);
+
+        // Lowpass Filter for that deep hum sound
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(140, audioCtx.currentTime);
+
+        // Sub Oscillator 1 (55Hz - Deep Root A)
+        const osc1 = audioCtx.createOscillator();
+        osc1.type = 'sawtooth';
+        osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
+
+        // Sub Oscillator 2 (55.4Hz - Binaural Phase Beat)
+        const osc2 = audioCtx.createOscillator();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(55.4, audioCtx.currentTime);
+
+        // Ambient Fifth (82.4Hz)
+        const osc3 = audioCtx.createOscillator();
+        osc3.type = 'triangle';
+        osc3.frequency.setValueAtTime(82.4, audioCtx.currentTime);
+
+        // LFO for periodic ambient wave movement
+        const lfo = audioCtx.createOscillator();
+        const lfoGain = audioCtx.createGain();
+        lfo.frequency.setValueAtTime(0.15, audioCtx.currentTime);
+        lfoGain.gain.setValueAtTime(30, audioCtx.currentTime);
+        lfo.connect(filter.frequency);
+        lfo.start();
+
+        osc1.connect(filter);
+        osc2.connect(filter);
+        osc3.connect(filter);
+        filter.connect(droneGain);
+        droneGain.connect(audioCtx.destination);
+
+        osc1.start();
+        osc2.start();
+        osc3.start();
+      } catch(e) {}
+    }
+
+    // Play synthesized cyber interaction tone
     function playTone(freq, type = 'sine', duration = 0.05, vol = 0.08) {
       if (!audioEnabled) return;
       initAudio();
@@ -836,9 +900,9 @@
 
     // Sound presets
     const CyberSound = {
-      hover: () => playTone(880, 'sine', 0.04, 0.03), // subtle high blip
-      click: () => playTone(540, 'triangle', 0.06, 0.07), // mechanical tap
-      type: () => playTone(600 + Math.random() * 200, 'square', 0.02, 0.015), // typing click
+      hover: () => playTone(880, 'sine', 0.04, 0.03),
+      click: () => playTone(540, 'triangle', 0.06, 0.07),
+      type: () => playTone(600 + Math.random() * 200, 'square', 0.02, 0.015),
       launch: () => {
         if (!audioEnabled) return;
         initAudio();
@@ -858,15 +922,35 @@
       }
     };
 
-    // Toggle Audio button
+    // Toggle Audio & Ambient Drone
     const audioToggle = document.getElementById('audioToggle');
     const audioText = document.getElementById('audioText');
-    audioToggle.addEventListener('click', () => {
+
+    audioToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      initAudio();
       audioEnabled = !audioEnabled;
       audioToggle.classList.toggle('muted', !audioEnabled);
       audioText.textContent = audioEnabled ? 'AUDIO: ON' : 'AUDIO: OFF';
-      if (audioEnabled) CyberSound.click();
+
+      if (droneGain) {
+        if (audioEnabled) {
+          droneGain.gain.cancelScheduledValues(audioCtx.currentTime);
+          droneGain.gain.setValueAtTime(droneGain.gain.value, audioCtx.currentTime);
+          droneGain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + 0.8);
+          CyberSound.click();
+        } else {
+          droneGain.gain.cancelScheduledValues(audioCtx.currentTime);
+          droneGain.gain.setValueAtTime(droneGain.gain.value, audioCtx.currentTime);
+          droneGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+        }
+      }
     });
+
+    // Start background drone on user's first touch/click
+    window.addEventListener('click', initAudio, { once: true });
+    window.addEventListener('keydown', initAudio, { once: true });
+    window.addEventListener('touchstart', initAudio, { once: true });
 
     /* ================= MATRIX CANVAS EFFECT ================= */
     const canvas = document.getElementById('matrixCanvas');
