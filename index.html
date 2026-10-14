@@ -62,15 +62,14 @@
       pointer-events: none;
     }
 
-    /* CRT Scanline Overlay */
-    body::before {
-      content: " ";
+    /* CRT Scanline Overlay - Yeh ab profile photo ke upar nahi aayega */
+    .scanlines {
       display: block;
       position: fixed;
       top: 0; left: 0; bottom: 0; right: 0;
       background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), 
                   linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-      z-index: 1000;
+      z-index: 10;
       background-size: 100% 3px, 6px 100%;
       pointer-events: none;
       opacity: 0.7;
@@ -86,7 +85,7 @@
       margin: 0 auto;
       padding-bottom: 50px;
       position: relative;
-      z-index: 2;
+      z-index: 12; /* Scanlines (z-index 10) ke upar rakha hai taaki click/view clear rahe */
     }
 
     /* Terminal Header */
@@ -103,9 +102,9 @@
       width: 140px;
       height: 140px;
       margin-bottom: 24px;
+      z-index: 15; /* Scanlines se bilkul upar clear visibility ke liye */
     }
 
-    /* Hexagon/Radar ring */
     .photo-ring {
       position: relative;
       width: 100%;
@@ -125,7 +124,8 @@
       display: block;
       background: #020b05;
       border: 3px solid var(--bg);
-      filter: contrast(1.1) brightness(0.95);
+      /* Kisi bhi tarah ka filter ya scanline hata diya hai taaki face bilkul clean dikhe */
+      filter: none; 
     }
 
     .avatar-fallback {
@@ -376,7 +376,6 @@
       overflow: hidden;
     }
 
-    /* Corner Tech Accents */
     .card::before, .card::after {
       content: "";
       position: absolute;
@@ -486,7 +485,6 @@
       transform: translate(3px, -3px);
     }
 
-    /* Terminal Empty state */
     .empty-state {
       display: none;
       text-align: center;
@@ -499,7 +497,6 @@
       letter-spacing: 1px;
     }
 
-    /* Footer Terminal */
     footer {
       border-top: 1px solid var(--border);
       padding: 30px 0 20px;
@@ -533,6 +530,9 @@
 
   <!-- Live Matrix Canvas Background -->
   <canvas id="matrixCanvas"></canvas>
+
+  <!-- CRT Scanline overlay (Ab container ke niche hai taaki photo par lines na aaye) -->
+  <div class="scanlines"></div>
 
   <div class="container">
     <header class="hero">
