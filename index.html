@@ -34,6 +34,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      cursor: none; /* Replaced by custom cyber cursor */
     }
 
     html {
@@ -48,6 +49,38 @@
       overflow-x: hidden;
       line-height: 1.6;
       position: relative;
+    }
+
+    /* Custom Crosshair Cursor */
+    #cyberCursor {
+      position: fixed;
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--matrix-green);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      transition: width 0.15s ease, height 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #cyberCursor::after {
+      content: "";
+      width: 4px;
+      height: 4px;
+      background: var(--matrix-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--matrix-green);
+    }
+
+    #cyberCursor.active {
+      width: 38px;
+      height: 38px;
+      background: rgba(0, 255, 102, 0.12);
+      border-color: #fff;
     }
 
     /* Matrix Rain Canvas */
@@ -88,11 +121,33 @@
       z-index: 12;
     }
 
-    /* Audio Toggle Control */
+    /* Top HUD Ribbon */
+    .top-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 18px;
+      gap: 12px;
+      font-size: 10px;
+      color: var(--matrix-green);
+      flex-wrap: wrap;
+    }
+
+    .telemetry-row {
+      display: flex;
+      gap: 14px;
+      background: rgba(0, 20, 8, 0.5);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 4px;
+      letter-spacing: 1.2px;
+    }
+
+    .telemetry-row span strong {
+      color: #fff;
+    }
+
     .audio-hud-toggle {
-      position: absolute;
-      top: 20px;
-      right: 0;
       background: rgba(0, 20, 8, 0.6);
       border: 1px solid var(--border);
       color: var(--matrix-green);
@@ -101,12 +156,10 @@
       letter-spacing: 1.5px;
       padding: 6px 14px;
       border-radius: 4px;
-      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
       transition: all 0.2s ease;
-      z-index: 20;
     }
 
     .audio-hud-toggle:hover {
@@ -136,7 +189,7 @@
 
     /* Terminal Header */
     .hero {
-      padding: 60px 0 35px;
+      padding: 45px 0 35px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -380,7 +433,6 @@
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 1px;
-      cursor: pointer;
       transition: all 0.2s ease;
       text-transform: uppercase;
     }
@@ -494,12 +546,19 @@
       flex-grow: 1;
     }
 
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+    }
+
     .visit-btn {
+      flex: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      width: 100%;
       padding: 10px 14px;
       border-radius: 4px;
       background: rgba(0, 255, 102, 0.1);
@@ -530,6 +589,24 @@
       transform: translate(3px, -3px);
     }
 
+    .copy-btn {
+      padding: 10px 12px;
+      background: rgba(0, 20, 8, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--matrix-green);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      border-color: var(--matrix-green);
+      box-shadow: 0 0 10px var(--green-glow);
+      background: rgba(0, 255, 102, 0.15);
+    }
+
     .empty-state {
       display: none;
       text-align: center;
@@ -540,6 +617,131 @@
       border-radius: 6px;
       font-size: 13px;
       letter-spacing: 1px;
+    }
+
+    /* CLI Floating Trigger Button */
+    .cli-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background: #020e06;
+      border: 1px solid var(--border-bright);
+      color: var(--matrix-green);
+      padding: 12px 18px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 20px var(--green-glow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .cli-fab:hover {
+      background: var(--matrix-green);
+      color: #000;
+      box-shadow: 0 0 30px var(--matrix-green);
+    }
+
+    /* CLI Overlay Window */
+    .cli-modal {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: min(100% - 48px, 460px);
+      height: 380px;
+      background: rgba(2, 10, 5, 0.95);
+      border: 1px solid var(--border-bright);
+      border-radius: 8px;
+      z-index: 101;
+      display: none;
+      flex-direction: column;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px var(--green-glow);
+      overflow: hidden;
+    }
+
+    .cli-header {
+      background: rgba(0, 255, 102, 0.1);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--matrix-green);
+      letter-spacing: 1px;
+    }
+
+    .cli-close {
+      background: none;
+      border: none;
+      color: var(--matrix-green);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .cli-body {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      font-size: 12px;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      scrollbar-width: thin;
+    }
+
+    .cli-input-line {
+      display: flex;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .cli-input-line span {
+      color: var(--matrix-green);
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .cli-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--matrix-green);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      outline: none;
+    }
+
+    /* Copied Toast Banner */
+    .toast-banner {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #021207;
+      border: 1px solid var(--border-bright);
+      color: var(--matrix-green);
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 20px var(--green-glow);
+      z-index: 10000;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-banner.show {
+      transform: translateX(-50%) translateY(0);
     }
 
     footer {
@@ -564,15 +766,22 @@
 
     @media (max-width: 650px) {
       .grid { grid-template-columns: 1fr; }
-      .hero { padding: 45px 0 25px; }
+      .hero { padding: 35px 0 20px; }
       .photo-wrapper { width: 120px; height: 120px; }
       .hero h1 { letter-spacing: 3px; }
       .stat-card { min-width: 90px; padding: 10px; }
-      .audio-hud-toggle { top: 12px; font-size: 9px; padding: 4px 10px; }
+      .cli-modal { width: calc(100% - 32px); right: 16px; bottom: 74px; }
+      .cli-fab { right: 16px; bottom: 16px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Custom Cyber Crosshair -->
+  <div id="cyberCursor"></div>
+
+  <!-- Toast for Copy Alert -->
+  <div id="toastBanner" class="toast-banner">>_ LINK_PAYLOAD COPIED TO BUFFER</div>
 
   <!-- Live Matrix Canvas Background -->
   <canvas id="matrixCanvas"></canvas>
@@ -582,11 +791,21 @@
 
   <div class="container">
     
-    <!-- Sound Effect Toggle Button -->
-    <button class="audio-hud-toggle" id="audioToggle">
-      <span class="audio-dot"></span>
-      <span id="audioText">AUDIO: ON</span>
-    </button>
+    <!-- Top HUD Telemetry Ribbon -->
+    <div class="top-hud">
+      <div class="telemetry-row">
+        <span>UTC: <strong id="clockUtc">00:00:00</strong></span>
+        <span>IST: <strong id="clockIst">00:00:00</strong></span>
+        <span>LATENCY: <strong id="hudPing">18ms</strong></span>
+        <span>MEM: <strong id="hudMem">48MB</strong></span>
+      </div>
+
+      <!-- Sound Effect Toggle Button -->
+      <button class="audio-hud-toggle" id="audioToggle">
+        <span class="audio-dot"></span>
+        <span id="audioText">AUDIO: ON</span>
+      </button>
+    </div>
 
     <header class="hero">
       <div class="photo-wrapper">
@@ -607,7 +826,7 @@
         <span class="blinking-cursor"></span>
       </div>
 
-      <h1>SAMEER</h1>
+      <h1 id="decryptTitle" data-value="SAMEER">SAMEER</h1>
 
       <p class="hero-description">
         Architecting secure digital utilities, reverse-engineered web systems & automation scripts.<br>
@@ -652,144 +871,174 @@
 
       <div class="grid" id="grid">
 
-        <article class="card" data-name="PDFToolbox" data-category="Tools">
+        <article class="card" data-name="PDFToolbox" data-category="Tools" data-url="https://pdftoolbox.shop">
           <div class="card-top">
             <div class="card-icon">01</div>
             <span class="card-index">NODE://0x1</span>
           </div>
           <div class="category-badge">[TOOLS_&_UTILITIES]</div>
-          <h3>PDFToolbox</h3>
+          <h3 class="scramble-title" data-value="PDFToolbox">PDFToolbox</h3>
           <p class="card-description">High-performance document processing suite. Convert, inject, parse and compress PDF byte buffers client-side.</p>
-          <a class="visit-btn" href="https://pdftoolbox.shop" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://pdftoolbox.shop" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="Celebrity Buzz" data-category="Entertainment">
+        <article class="card" data-name="Celebrity Buzz" data-category="Entertainment" data-url="https://www.celebritybuzz.buzz/?m=1">
           <div class="card-top">
             <div class="card-icon">02</div>
             <span class="card-index">NODE://0x2</span>
           </div>
           <div class="category-badge">[ENTERTAINMENT_FEED]</div>
-          <h3>Celebrity Buzz</h3>
+          <h3 class="scramble-title" data-value="Celebrity Buzz">Celebrity Buzz</h3>
           <p class="card-description">Decentralized pop-culture feed interceptor parsing real-time entertainment bulletins and viral highlights.</p>
-          <a class="visit-btn" href="https://www.celebritybuzz.buzz/?m=1" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://www.celebritybuzz.buzz/?m=1" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="HisabPro" data-category="Business">
+        <article class="card" data-name="HisabPro" data-category="Business" data-url="https://sameerkhan86926-a11y.github.io/hisabpro/">
           <div class="card-top">
             <div class="card-icon">03</div>
             <span class="card-index">NODE://0x3</span>
           </div>
           <div class="category-badge">[FINANCIAL_LEDGER]</div>
-          <h3>HisabPro</h3>
+          <h3 class="scramble-title" data-value="HisabPro">HisabPro</h3>
           <p class="card-description">Cryptographic accounting ledger for balancing khata credits, enterprise stock inventory, and multi-tenant billing.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/hisabpro/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/hisabpro/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="CalcPro" data-category="Tools">
+        <article class="card" data-name="CalcPro" data-category="Tools" data-url="https://sameerkhan86926-a11y.github.io/calcpro/">
           <div class="card-top">
             <div class="card-icon">04</div>
             <span class="card-index">NODE://0x4</span>
           </div>
           <div class="category-badge">[MATH_LOGIC_CORE]</div>
-          <h3>CalcPro</h3>
+          <h3 class="scramble-title" data-value="CalcPro">CalcPro</h3>
           <p class="card-description">Micro-footprint numerical processor for instant arithmetic pipelines and scientific evaluation scripts.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/calcpro/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/calcpro/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="LabelPro" data-category="Business">
+        <article class="card" data-name="LabelPro" data-category="Business" data-url="https://sameerkhan86926-a11y.github.io/labelpro/">
           <div class="card-top">
             <div class="card-icon">05</div>
             <span class="card-index">NODE://0x5</span>
           </div>
           <div class="category-badge">[BARCODE_SYNTHESIS]</div>
-          <h3>LabelPro</h3>
+          <h3 class="scramble-title" data-value="LabelPro">LabelPro</h3>
           <p class="card-description">Industrial-grade thermal print engine and dynamic barcode generator compiled for supply-chain dispatch.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/labelpro/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/labelpro/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="SK Player" data-category="Entertainment">
+        <article class="card" data-name="SK Player" data-category="Entertainment" data-url="https://sameerkhan86926-a11y.github.io/skplayer/">
           <div class="card-top">
             <div class="card-icon">06</div>
             <span class="card-index">NODE://0x6</span>
           </div>
           <div class="category-badge">[MEDIA_STREAM_CORE]</div>
-          <h3>SK Player</h3>
+          <h3 class="scramble-title" data-value="SK Player">SK Player</h3>
           <p class="card-description">Low-latency media stream renderer engineered for seamless audio/video packet playback across modern viewports.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/skplayer/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/skplayer/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="Vibe Wish" data-category="Creative">
+        <article class="card" data-name="Vibe Wish" data-category="Creative" data-url="https://sameerkhan86926-a11y.github.io/vibe-wish/">
           <div class="card-top">
             <div class="card-icon">07</div>
             <span class="card-index">NODE://0x7</span>
           </div>
           <div class="category-badge">[EXPERIENCE_FORGE]</div>
-          <h3>Vibe Wish</h3>
+          <h3 class="scramble-title" data-value="Vibe Wish">Vibe Wish</h3>
           <p class="card-description">Interactive celebratory DOM generator delivering custom reactive animations and digital greeting transmissions.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/vibe-wish/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/vibe-wish/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="Universal Restaurant POS" data-category="Business">
+        <article class="card" data-name="Universal Restaurant POS" data-category="Business" data-url="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/">
           <div class="card-top">
             <div class="card-icon">08</div>
             <span class="card-index">NODE://0x8</span>
           </div>
           <div class="category-badge">[POS_TERMINAL_SYS]</div>
-          <h3>Universal Restaurant POS</h3>
+          <h3 class="scramble-title" data-value="Universal POS">Universal POS</h3>
           <p class="card-description">Fast-checkout transaction engine designed for dining spaces, KOT automation, and rapid invoice synthesis.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="SK Logistics" data-category="Business">
+        <article class="card" data-name="SK Logistics" data-category="Business" data-url="https://sameerkhan86926-a11y.github.io/sk-logistics/">
           <div class="card-top">
             <div class="card-icon">09</div>
             <span class="card-index">NODE://0x9</span>
           </div>
           <div class="category-badge">[TRANSIT_ROUTING]</div>
-          <h3>SK Logistics</h3>
+          <h3 class="scramble-title" data-value="SK Logistics">SK Logistics</h3>
           <p class="card-description">Telemetry fleet tracker and transit manifest coordinator optimized for multi-location consignment dispatches.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/sk-logistics/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/sk-logistics/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
-        <article class="card" data-name="Fastgram" data-category="Social">
+        <article class="card" data-name="Fastgram" data-category="Social" data-url="https://sameerkhan86926-a11y.github.io/Fastgram/">
           <div class="card-top">
             <div class="card-icon">10</div>
             <span class="card-index">NODE://0xA</span>
           </div>
           <div class="category-badge">[SOCIAL_FEED_API]</div>
-          <h3>Fastgram</h3>
+          <h3 class="scramble-title" data-value="Fastgram">Fastgram</h3>
           <p class="card-description">Ultra-responsive social viewer client engineered for lightweight DOM rendering and rapid feed ingestion.</p>
-          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/Fastgram/" target="_blank" rel="noopener noreferrer">
-            EXECUTE LINK
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
+          <div class="card-actions">
+            <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/Fastgram/" target="_blank" rel="noopener noreferrer">
+              EXECUTE LINK
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </a>
+            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+          </div>
         </article>
 
       </div>
@@ -799,6 +1048,23 @@
       </div>
     </main>
 
+    <!-- Floating Interactive CLI Terminal Window & Button -->
+    <button class="cli-fab" id="cliToggleBtn">>_ CLI_MODE</button>
+
+    <div class="cli-modal" id="cliModal">
+      <div class="cli-header">
+        <span>ROOT_SHELL://v2.4.0</span>
+        <button class="cli-close" id="cliCloseBtn">✕</button>
+      </div>
+      <div class="cli-body" id="cliBody">
+        <div>SYSTEM SECURE. Type <strong>help</strong> to list available commands.</div>
+      </div>
+      <div class="cli-input-line">
+        <span>root@node:~$</span>
+        <input type="text" class="cli-input" id="cliInput" placeholder="Enter command..." autocomplete="off">
+      </div>
+    </div>
+
     <footer>
       <div class="footer-brand">SAMEER // ROOT ACCESS</div>
       <p>SYSTEM TIMESTAMP: <span id="year"></span> | ENCRYPTION: SHA-256 ACTIVE</p>
@@ -806,7 +1072,71 @@
   </div>
 
   <script>
-    /* ================= CONTINUOUS AMBIENT DRONE & SFX SYNTH ================= */
+    /* ================= 1. CUSTOM PRECISION CROSSHAIR ================= */
+    const cursor = document.getElementById('cyberCursor');
+    window.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    function bindHoverElements() {
+      const interactives = document.querySelectorAll('button, a, input, .card');
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+      });
+    }
+    bindHoverElements();
+
+    /* ================= 2. LIVE HUD TELEMETRY & CLOCK ================= */
+    function updateHUD() {
+      const now = new Date();
+      document.getElementById('clockUtc').textContent = now.toUTCString().split(' ')[4];
+      
+      const istOptions = { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      document.getElementById('clockIst').textContent = new Intl.DateTimeFormat('en-GB', istOptions).format(now);
+
+      // Random jitter for simulation
+      if (Math.random() > 0.6) {
+        document.getElementById('hudPing').textContent = Math.floor(16 + Math.random() * 12) + 'ms';
+      }
+    }
+    setInterval(updateHUD, 1000);
+    updateHUD();
+
+    /* ================= 3. SCRAMBLE / DECRYPT TEXT EFFECT ================= */
+    const cipherChars = '0123456789ABCDEF!@#$%&*<>/';
+
+    function decryptScramble(element) {
+      const targetText = element.dataset.value;
+      let iterations = 0;
+      const interval = setInterval(() => {
+        element.textContent = targetText.split('')
+          .map((char, index) => {
+            if (index < iterations) return targetText[index];
+            return cipherChars[Math.floor(Math.random() * cipherChars.length)];
+          })
+          .join('');
+
+        if (iterations >= targetText.length) clearInterval(interval);
+        iterations += 1 / 2;
+      }, 30);
+    }
+
+    // Auto-trigger scramble on load and hover
+    window.addEventListener('DOMContentLoaded', () => {
+      decryptScramble(document.getElementById('decryptTitle'));
+      document.querySelectorAll('.scramble-title').forEach(el => decryptScramble(el));
+    });
+
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        const title = card.querySelector('.scramble-title');
+        if (title) decryptScramble(title);
+      });
+    });
+
+    /* ================= 4. AUDIO SYNTHESIZER ENGINE ================= */
     let audioEnabled = true;
     let audioCtx = null;
     let droneGain = null;
@@ -824,85 +1154,58 @@
       }
     }
 
-    // Continuous Sci-Fi Ambient Cyber Drone Engine
     function startAmbientDrone() {
       if (!audioCtx || droneStarted) return;
       droneStarted = true;
-
       try {
-        // Master Drone Gain
         droneGain = audioCtx.createGain();
         droneGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-        // Smooth fade in
         droneGain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + 3);
 
-        // Lowpass Filter for that deep hum sound
         const filter = audioCtx.createBiquadFilter();
         filter.type = "lowpass";
         filter.frequency.setValueAtTime(140, audioCtx.currentTime);
 
-        // Sub Oscillator 1 (55Hz - Deep Root A)
         const osc1 = audioCtx.createOscillator();
         osc1.type = 'sawtooth';
         osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
 
-        // Sub Oscillator 2 (55.4Hz - Binaural Phase Beat)
         const osc2 = audioCtx.createOscillator();
         osc2.type = 'sine';
         osc2.frequency.setValueAtTime(55.4, audioCtx.currentTime);
 
-        // Ambient Fifth (82.4Hz)
-        const osc3 = audioCtx.createOscillator();
-        osc3.type = 'triangle';
-        osc3.frequency.setValueAtTime(82.4, audioCtx.currentTime);
-
-        // LFO for periodic ambient wave movement
-        const lfo = audioCtx.createOscillator();
-        const lfoGain = audioCtx.createGain();
-        lfo.frequency.setValueAtTime(0.15, audioCtx.currentTime);
-        lfoGain.gain.setValueAtTime(30, audioCtx.currentTime);
-        lfo.connect(filter.frequency);
-        lfo.start();
-
         osc1.connect(filter);
         osc2.connect(filter);
-        osc3.connect(filter);
         filter.connect(droneGain);
         droneGain.connect(audioCtx.destination);
 
         osc1.start();
         osc2.start();
-        osc3.start();
       } catch(e) {}
     }
 
-    // Play synthesized cyber interaction tone
     function playTone(freq, type = 'sine', duration = 0.05, vol = 0.08) {
       if (!audioEnabled) return;
       initAudio();
       try {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-
         osc.type = type;
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
         gain.gain.setValueAtTime(vol, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-
         osc.start();
         osc.stop(audioCtx.currentTime + duration);
       } catch(e) {}
     }
 
-    // Sound presets
     const CyberSound = {
-      hover: () => playTone(880, 'sine', 0.04, 0.03),
-      click: () => playTone(540, 'triangle', 0.06, 0.07),
+      hover: () => playTone(880, 'sine', 0.04, 0.025),
+      click: () => playTone(540, 'triangle', 0.06, 0.06),
       type: () => playTone(600 + Math.random() * 200, 'square', 0.02, 0.015),
+      copy: () => playTone(1200, 'sine', 0.1, 0.07),
       launch: () => {
         if (!audioEnabled) return;
         initAudio();
@@ -922,10 +1225,8 @@
       }
     };
 
-    // Toggle Audio & Ambient Drone
     const audioToggle = document.getElementById('audioToggle');
     const audioText = document.getElementById('audioText');
-
     audioToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       initAudio();
@@ -935,24 +1236,111 @@
 
       if (droneGain) {
         if (audioEnabled) {
-          droneGain.gain.cancelScheduledValues(audioCtx.currentTime);
           droneGain.gain.setValueAtTime(droneGain.gain.value, audioCtx.currentTime);
           droneGain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + 0.8);
           CyberSound.click();
         } else {
-          droneGain.gain.cancelScheduledValues(audioCtx.currentTime);
           droneGain.gain.setValueAtTime(droneGain.gain.value, audioCtx.currentTime);
           droneGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
         }
       }
     });
 
-    // Start background drone on user's first touch/click
     window.addEventListener('click', initAudio, { once: true });
     window.addEventListener('keydown', initAudio, { once: true });
-    window.addEventListener('touchstart', initAudio, { once: true });
 
-    /* ================= MATRIX CANVAS EFFECT ================= */
+    /* ================= 5. COPY PAYLOAD FEEDBACK ================= */
+    const toast = document.getElementById('toastBanner');
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.card');
+        const url = card.dataset.url;
+        navigator.clipboard.writeText(url).then(() => {
+          CyberSound.copy();
+          toast.textContent = `>_ LINK COPIED: ${card.dataset.name.toUpperCase()}`;
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2200);
+        });
+      });
+    });
+
+    /* ================= 6. INTERACTIVE CLI TERMINAL ================= */
+    const cliToggleBtn = document.getElementById('cliToggleBtn');
+    const cliModal = document.getElementById('cliModal');
+    const cliCloseBtn = document.getElementById('cliCloseBtn');
+    const cliInput = document.getElementById('cliInput');
+    const cliBody = document.getElementById('cliBody');
+
+    function toggleCLI() {
+      const isOpen = cliModal.style.display === 'flex';
+      cliModal.style.display = isOpen ? 'none' : 'flex';
+      if (!isOpen) {
+        cliInput.focus();
+        CyberSound.click();
+      }
+    }
+
+    cliToggleBtn.addEventListener('click', toggleCLI);
+    cliCloseBtn.addEventListener('click', toggleCLI);
+
+    function appendCLIPrompt(cmd, output) {
+      const line = document.createElement('div');
+      line.innerHTML = `<span style="color:var(--matrix-green)">root@node:~$</span> ${cmd}`;
+      const res = document.createElement('div');
+      res.style.color = 'var(--text-muted)';
+      res.style.marginBottom = '6px';
+      res.innerHTML = output;
+      cliBody.appendChild(line);
+      cliBody.appendChild(res);
+      cliBody.scrollTop = cliBody.scrollHeight;
+    }
+
+    cliInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = cliInput.value.trim().toLowerCase();
+        cliInput.value = '';
+        CyberSound.click();
+
+        if (cmd === '') return;
+
+        if (cmd === 'clear') {
+          cliBody.innerHTML = '';
+          return;
+        }
+
+        if (cmd === 'help') {
+          appendCLIPrompt(cmd, `
+            <strong>help</strong> - List commands<br>
+            <strong>list</strong> - List deployed project nodes<br>
+            <strong>open &lt;name&gt;</strong> - Launch node (e.g. open pdftoolbox)<br>
+            <strong>about</strong> - Creator fingerprint info<br>
+            <strong>clear</strong> - Purge buffer
+          `);
+        } else if (cmd === 'list') {
+          const names = Array.from(document.querySelectorAll('.card')).map(c => c.dataset.name).join(', ');
+          appendCLIPrompt(cmd, `DEPLOYED NODES: [ ${names} ]`);
+        } else if (cmd.startsWith('open ')) {
+          const target = cmd.replace('open ', '').trim();
+          const card = Array.from(document.querySelectorAll('.card')).find(c => c.dataset.name.toLowerCase().includes(target));
+          if (card) {
+            appendCLIPrompt(cmd, `EXECUTING: ${card.dataset.name}...`);
+            CyberSound.launch();
+            window.open(card.dataset.url, '_blank');
+          } else {
+            appendCLIPrompt(cmd, `<span style="color:#ef4444">[ERROR]: Node '${target}' not found.</span>`);
+          }
+        } else if (cmd === 'about') {
+          appendCLIPrompt(cmd, `IDENTITY: SAMEER<br>SYSTEM: Digital Universe Architect<br>STATUS: 10 Nodes Online`);
+        } else {
+          appendCLIPrompt(cmd, `<span style="color:#ef4444">Command not recognized: '${cmd}'. Type 'help'.</span>`);
+        }
+      } else {
+        CyberSound.type();
+      }
+    });
+
+    /* ================= 7. MATRIX RAIN EFFECT ================= */
     const canvas = document.getElementById('matrixCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -971,7 +1359,6 @@
     function drawMatrix() {
       ctx.fillStyle = 'rgba(3, 7, 4, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
       ctx.fillStyle = '#00ff66';
       ctx.font = fontSize + 'px monospace';
 
@@ -987,7 +1374,7 @@
     }
     setInterval(drawMatrix, 45);
 
-    /* ================= TERMINAL FILTER LOGIC + AUDIO HOOKS ================= */
+    /* ================= 8. TERMINAL SEARCH & FILTER LOGIC ================= */
     const searchInput = document.getElementById("search");
     const cards = Array.from(document.querySelectorAll(".card"));
     const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
@@ -1028,13 +1415,11 @@
       emptyState.style.display = matchCount === 0 ? "block" : "none";
     }
 
-    // Input Sound Event
     searchInput.addEventListener("input", () => {
       CyberSound.type();
       filterCards();
     });
 
-    // Buttons sound events
     filterButtons.forEach(btn => {
       btn.addEventListener("mouseenter", CyberSound.hover);
       btn.addEventListener("click", () => {
@@ -1046,7 +1431,6 @@
       });
     });
 
-    // Cards & launch button sound events
     cards.forEach(card => {
       card.addEventListener("mouseenter", CyberSound.hover);
       const visitBtn = card.querySelector(".visit-btn");
