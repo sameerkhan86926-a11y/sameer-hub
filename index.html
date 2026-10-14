@@ -1,667 +1,846 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#08050e">
-<meta name="description" content="Welcome to SAMEER's digital universe. Explore my websites, tools and creative projects.">
-<title>SAMEER | Digital Universe</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090612">
+  <meta name="description" content="Explore Sameer's digital universe featuring web apps, utility tools, SaaS products, and creative systems.">
+  <title>Sameer | Digital Universe & Portfolio</title>
 
-<style>
-:root {
-  --bg: #08050e;
-  --panel: #120b1d;
-  --purple: #a855f7;
-  --pink: #e879f9;
-  --white: #fff;
-  --muted: #aaa0b8;
-  --border: rgba(168,85,247,.25);
-}
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+  <style>
+    :root {
+      --bg: #07040d;
+      --card-bg: rgba(18, 11, 29, 0.65);
+      --card-hover: rgba(26, 16, 42, 0.85);
+      --primary: #a855f7;
+      --primary-bright: #c084fc;
+      --accent: #e879f9;
+      --text-main: #f5f3ff;
+      --text-muted: #9d8ba9;
+      --text-dim: #6b5c77;
+      --border: rgba(168, 85, 247, 0.18);
+      --border-hover: rgba(216, 180, 254, 0.5);
+      --glow: rgba(168, 85, 247, 0.16);
+      --radius: 18px;
+      --font-heading: 'Space Grotesk', -apple-system, sans-serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
 
-html { scroll-behavior: smooth; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(100px);
-}
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(147, 51, 234, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 100% 70%, rgba(232, 121, 249, 0.08) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    }
 
-body::before {
-  width: 380px;
-  height: 380px;
-  top: -180px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(147,51,234,.2);
-}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-body::after {
-  width: 300px;
-  height: 300px;
-  right: -180px;
-  bottom: 5%;
-  background: rgba(192,38,211,.13);
-}
+    .container {
+      width: min(100% - 36px, 1060px);
+      margin: 0 auto;
+      padding-bottom: 30px;
+    }
 
-a { color: inherit; text-decoration: none; }
+    /* Ambient Lighting */
+    .ambient-glow {
+      position: fixed;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.6;
+    }
+    .glow-top {
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, #9333ea, #4c1d95);
+    }
 
-.container {
-  width: min(100% - 32px, 950px);
-  margin: auto;
-}
+    /* Header & Hero */
+    .hero {
+      padding: 68px 0 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-/* HERO /
+    .photo-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin-bottom: 24px;
+    }
 
-.hero {
-  padding: 58px 0 38px;
-  text-align: center;
-}
+    .photo-glow {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f0abfc, #a855f7, #6b21a8);
+      filter: blur(12px);
+      opacity: 0.65;
+      animation: pulseGlow 4s ease-in-out infinite alternate;
+    }
 
-.photo-ring {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  margin: 0 auto 25px;
-  padding: 5px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f0abfc, #9333ea, #4c1d95, #e879f9);
-  box-shadow: 0 0 25px rgba(168,85,247,.4),
-              0 0 65px rgba(168,85,247,.13);
-  animation: ringGlow 3s ease-in-out infinite alternate;
-}
+    .photo-ring {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, #f0abfc, #9333ea, #3b0764);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
 
-.photo-ring::before {
-  content: "";
-  position: absolute;
-  inset: -7px;
-  border: 1px solid rgba(216,180,254,.35);
-  border-radius: 50%;
-}
+    .profile-photo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      background: #190f28;
+      border: 3px solid var(--bg);
+    }
 
-.profile-photo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 50%;
-  border: 4px solid var(--bg);
-  background: #1b1029;
-}
+    .avatar-fallback {
+      display: none;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2e1065, #120b1d);
+      color: #e9d5ff;
+      font-weight: 800;
+      font-size: 40px;
+      font-family: var(--font-heading);
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--bg);
+    }
 
-@keyframes ringGlow {
-  from { box-shadow: 0 0 20px rgba(168,85,247,.3); }
-  to { box-shadow: 0 0 38px rgba(192,132,252,.55); }
-}
+    @keyframes pulseGlow {
+      from { opacity: 0.4; transform: scale(0.97); }
+      to { opacity: 0.75; transform: scale(1.03); }
+    }
 
-.eyebrow {
-  color: #d8b4fe;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--primary-bright);
+      margin-bottom: 12px;
+      background: rgba(168, 85, 247, 0.08);
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
 
-.hero h1 {
-  font-size: clamp(48px, 11vw, 82px);
-  line-height: 1.1;
-  font-weight: 950;
-  letter-spacing: 7px;
-  background: linear-gradient(120deg, #fff, #e9d5ff 40%, #c084fc 70%, #f0abfc);
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: drop-shadow(0 0 18px rgba(168,85,247,.25));
-}
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent);
+    }
 
-.hero-description {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.8;
-  max-width: 390px;
-  margin: 15px auto 0;
-}
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(44px, 9vw, 84px);
+      font-weight: 800;
+      letter-spacing: 5px;
+      line-height: 1;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 10%, #e9d5ff 55%, #c084fc 80%, #f0abfc 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 16px;
+    }
 
-.hero-description strong {
-  color: #e9d5ff;
-  font-weight: 600;
-}
+    .hero-description {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 440px;
+      line-height: 1.7;
+    }
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 21px;
-  padding: 9px 14px;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  background: rgba(168,85,247,.07);
-  color: #d8b4fe;
-  font-size: 10px;
-  letter-spacing: 1.8px;
-}
+    .hero-description strong {
+      color: #faf5ff;
+      font-weight: 600;
+    }
 
-.pill-dot {
-  width: 7px;
-  height: 7px;
-  background: #c084fc;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #a855f7;
-}
+    /* Stats Ribbon */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 34px 0 46px;
+      flex-wrap: wrap;
+    }
 
-/ STATS /
+    .stat-card {
+      min-width: 125px;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.2s;
+    }
 
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin: 30px 0 45px;
-}
+    .stat-card:hover {
+      border-color: rgba(192, 132, 252, 0.4);
+    }
 
-.stat {
-  min-width: 100px;
-  padding: 13px 20px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.025);
-  border-radius: 14px;
-}
+    .stat-card strong {
+      font-family: var(--font-heading);
+      display: block;
+      font-size: 26px;
+      font-weight: 700;
+      color: #faf5ff;
+      line-height: 1.1;
+    }
 
-.stat strong {
-  display: block;
-  font-size: 23px;
-  color: #e9d5ff;
-}
+    .stat-card span {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
 
-.stat span {
-  display: block;
-  margin-top: 4px;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-  text-transform: uppercase;
-}
+    /* Toolbar: Heading, Search & Filters */
+    .toolbar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+      gap: 12px;
+    }
 
-/ PROJECTS /
+    .toolbar-header h2 {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
 
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
-}
+    .toolbar-header h2 span {
+      color: var(--primary-bright);
+    }
 
-.section-heading h2 {
-  font-size: 21px;
-  font-weight: 750;
-}
+    .project-counter {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
 
-.section-heading h2 span { color: #c084fc; }
+    .search-box {
+      position: relative;
+      margin-bottom: 16px;
+    }
 
-.count {
-  color: var(--muted);
-  font-size: 11px;
-}
+    .search-box svg {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      stroke: var(--primary-bright);
+      pointer-events: none;
+    }
 
-.search-wrap {
-  position: relative;
-  margin-bottom: 16px;
-}
+    .search-box input {
+      width: 100%;
+      padding: 15px 18px 15px 48px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(10px);
+    }
 
-.search-wrap span {
-  position: absolute;
-  top: 50%;
-  left: 16px;
-  transform: translateY(-50%);
-  font-size: 20px;
-  color: #c084fc;
-}
+    .search-box input:focus {
+      border-color: var(--primary);
+      background: rgba(168, 85, 247, 0.05);
+      box-shadow: 0 0 24px rgba(168, 85, 247, 0.16);
+    }
 
-.search-wrap input {
-  width: 100%;
-  padding: 16px 17px 16px 46px;
-  background: rgba(255,255,255,.035);
-  color: white;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  outline: none;
-  font-size: 14px;
-  transition: .25s;
-}
+    .search-box input::placeholder {
+      color: var(--text-dim);
+    }
 
-.search-wrap input:focus {
-  border-color: #a855f7;
-  box-shadow: 0 0 20px rgba(168,85,247,.12);
-}
+    .filters-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .filters-row::-webkit-scrollbar { display: none; }
 
-.search-wrap input::placeholder { color: #81758e; }
+    .filter-btn {
+      flex-shrink: 0;
+      padding: 9px 18px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-.filters {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 2px 0 17px;
-  scrollbar-width: none;
-}
+    .filter-btn:hover {
+      color: #fff;
+      border-color: var(--primary-bright);
+    }
 
-.filters::-webkit-scrollbar { display: none; }
+    .filter-btn.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.24), rgba(232, 121, 249, 0.15));
+      color: #fff;
+      border-color: var(--primary-bright);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+    }
 
-.filter {
-  flex-shrink: 0;
-  padding: 10px 15px;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  background: rgba(255,255,255,.025);
-  color: #bdb2ca;
-  font-size: 11px;
-  cursor: pointer;
-  transition: .2s;
-}
+    /* Projects Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+      padding-bottom: 60px;
+    }
 
-.filter.active,
-.filter:hover {
-  background: rgba(168,85,247,.18);
-  color: white;
-  border-color: #a855f7;
-}
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      backdrop-filter: blur(14px);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.25s ease, 
+                  box-shadow 0.25s ease, 
+                  background 0.25s ease;
+      overflow: hidden;
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px;
-  padding: 3px 0 48px;
-}
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 15%;
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232, 121, 249, 0.6), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
 
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  padding: 20px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 19px;
-  background: linear-gradient(145deg, rgba(29,18,44,.96), rgba(13,9,20,.97));
-  transition: transform .25s, border-color .25s, box-shadow .25s;
-  animation: enter .45s both;
-}
+    .card:hover {
+      transform: translateY(-4px);
+      background: var(--card-hover);
+      border-color: var(--border-hover);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 24px var(--glow);
+    }
 
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 15%;
-  width: 70%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #d8b4fe, transparent);
-}
+    .card:hover::before {
+      opacity: 1;
+    }
 
-.card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(192,132,252,.65);
-  box-shadow: 0 12px 35px rgba(112,40,180,.15);
-}
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
 
-@keyframes enter {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-bright);
+      font-size: 20px;
+    }
 
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 17px;
-}
+    .card-index {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
 
-.card-icon {
-  width: 46px;
-  height: 46px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  border: 1px solid rgba(168,85,247,.25);
-  background: linear-gradient(145deg, rgba(168,85,247,.2), rgba(192,38,211,.05));
-  color: #e9d5ff;
-  font-size: 22px;
-}
+    .category-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--primary-bright);
+      margin-bottom: 6px;
+    }
 
-.card-number {
-  color: #786386;
-  font-size: 10px;
-  letter-spacing: 1px;
-}
+    .card h3 {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
 
-.category {
-  margin-bottom: 8px;
-  color: #c084fc;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-}
+    .card-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+      flex-grow: 1;
+    }
 
-.card h3 {
-  margin-bottom: 8px;
-  font-size: 17px;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
+    .visit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7e22ce, #9333ea);
+      border: 1px solid rgba(232, 121, 249, 0.25);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      transition: all 0.2s ease;
+    }
 
-.card-description {
-  flex-grow: 1;
-  margin-bottom: 20px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
-}
+    .visit-btn svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      transition: transform 0.2s ease;
+    }
 
-.visit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px 10px;
-  border: 1px solid rgba(216,180,254,.3);
-  border-radius: 11px;
-  background: linear-gradient(100deg, #7e22ce, #a855f7);
-  color: white;
-  font-size: 12px;
-  font-weight: 700;
-  transition: .25s;
-}
+    .visit-btn:hover {
+      background: linear-gradient(135deg, #9333ea, #a855f7);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    }
 
-.visit:hover {
-  background: linear-gradient(100deg, #9333ea, #c084fc);
-  box-shadow: 0 0 20px rgba(168,85,247,.25);
-}
+    .visit-btn:hover svg {
+      transform: translate(2px, -2px);
+    }
 
-.arrow { transition: transform .2s; }
-.visit:hover .arrow { transform: translate(3px, -2px); }
+    /* Empty state */
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      margin: 20px 0;
+    }
 
-.empty {
-  display: none;
-  padding: 35px 10px;
-  color: var(--muted);
-  text-align: center;
-}
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(168, 85, 247, 0.12);
+      padding: 38px 0 20px;
+      text-align: center;
+    }
 
-/ FOOTER */
+    .footer-brand {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 5px;
+      color: #e9d5ff;
+      margin-bottom: 12px;
+    }
 
-footer {
-  padding: 27px 0 35px;
-  text-align: center;
-  border-top: 1px solid rgba(168,85,247,.14);
-}
+    .footer-divider {
+      width: 36px;
+      height: 2px;
+      margin: 0 auto 16px;
+      background: linear-gradient(90deg, #9333ea, #e879f9);
+      border-radius: 2px;
+    }
 
-.footer-name {
-  color: #e9d5ff;
-  font-weight: 900;
-  font-size: 18px;
-  letter-spacing: 5px;
-}
+    footer p {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
 
-.footer-line {
-  width: 42px;
-  height: 2px;
-  margin: 14px auto;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #7e22ce, #e879f9);
-}
-
-footer p {
-  color: #81758e;
-  font-size: 11px;
-  line-height: 1.9;
-}
-
-@media (max-width: 520px) {
-  .container { width: calc(100% - 28px); }
-  .hero { padding-top: 45px; }
-  .photo-ring { width: 132px; height: 132px; }
-  .hero h1 { letter-spacing: 5px; }
-  .grid { gap: 10px; }
-  .card { padding: 14px; border-radius: 16px; }
-  .card-icon { width: 41px; height: 41px; font-size: 19px; }
-  .card h3 { font-size: 15px; }
-  .card-description { font-size: 11px; }
-  .stat { min-width: 87px; padding: 12px 13px; }
-}
-
-@media (max-width: 340px) {
-  .grid { grid-template-columns: 1fr; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
-  }
-}
-</style>
+    /* Responsive */
+    @media (max-width: 680px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .hero {
+        padding: 50px 0 30px;
+      }
+      .photo-wrapper {
+        width: 120px;
+        height: 120px;
+      }
+      .hero h1 {
+        letter-spacing: 3px;
+      }
+      .stats {
+        margin: 24px 0 36px;
+        gap: 8px;
+      }
+      .stat-card {
+        min-width: 100px;
+        padding: 12px 14px;
+      }
+      .stat-card strong {
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
 
-  <header class="hero">
-    <div class="photo-ring">
-      <img
-        class="profile-photo"
-        src="./74695173-FF59-4FDA-81D6-79D667ECBCE4.png"
-        alt="SAMEER profile photo"
-      >
-    </div>
+  <div class="ambient-glow glow-top"></div>
 
-    <div class="eyebrow">WELCOME TO MY WORLD</div>
-    <h1>SAMEER</h1>
-
-    <p class="hero-description">
-      Building ideas into reality.<br>
-      <strong>One mind. Multiple creations.</strong>
-    </p>
-
-    <div class="pill">
-      <span class="pill-dot"></span>
-      MY DIGITAL UNIVERSE
-    </div>
-
-    <div class="stats">
-      <div class="stat">
-        <strong>10</strong>
-        <span>Projects</span>
+  <div class="container">
+    <header class="hero">
+      <div class="photo-wrapper">
+        <div class="photo-glow"></div>
+        <div class="photo-ring">
+          <img 
+            id="profileImg" 
+            class="profile-photo" 
+            src="./74695173-FF59-4FDA-81D6-79D667ECBCE4.png" 
+            alt="Sameer"
+          >
+          <div id="avatarFallback" class="avatar-fallback">S</div>
+        </div>
       </div>
-      <div class="stat">
-        <strong>01</strong>
-        <span>Universe</span>
+
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        Digital Universe
       </div>
-      <div class="stat">
-        <strong>∞</strong>
-        <span>Possibilities</span>
+
+      <h1>Sameer</h1>
+
+      <p class="hero-description">
+        Building ideas into high-performance web utilities & systems.<br>
+        <strong>One mind. Multiple creations.</strong>
+      </p>
+
+      <div class="stats">
+        <div class="stat-card">
+          <strong id="statProjects">10</strong>
+          <span>Projects</span>
+        </div>
+        <div class="stat-card">
+          <strong id="statCategories">5</strong>
+          <span>Domains</span>
+        </div>
+        <div class="stat-card">
+          <strong>100%</strong>
+          <span>Uptime</span>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main>
-    <div class="section-heading">
-      <h2>My <span>Projects.</span></h2>
-      <span class="count" id="count">10 websites</span>
-    </div>
+    <main>
+      <div class="toolbar-header">
+        <h2>Featured <span>Projects</span></h2>
+        <span class="project-counter" id="count">Showing 10 projects</span>
+      </div>
 
-    <div class="search-wrap">
-      <span>⌕</span>
-      <input type="search" id="search" placeholder="Find something interesting..." aria-label="Search projects">
-    </div>
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="search" id="search" placeholder="Search by name, category or keywords..." aria-label="Search projects">
+      </div>
 
-    <div class="filters">
-      <button class="filter active" data-filter="All">All Projects</button>
-      <button class="filter" data-filter="Tools">Tools</button>
-      <button class="filter" data-filter="Business">Business</button>
-      <button class="filter" data-filter="Entertainment">Entertainment</button>
-      <button class="filter" data-filter="Creative">Creative</button>
-      <button class="filter" data-filter="Social">Social</button>
-    </div>
+      <div class="filters-row" role="tablist">
+        <button class="filter-btn active" data-filter="All">All Projects</button>
+        <button class="filter-btn" data-filter="Tools">Tools</button>
+        <button class="filter-btn" data-filter="Business">Business</button>
+        <button class="filter-btn" data-filter="Entertainment">Entertainment</button>
+        <button class="filter-btn" data-filter="Creative">Creative</button>
+        <button class="filter-btn" data-filter="Social">Social</button>
+      </div>
 
-    <div class="grid" id="grid">
+      <div class="grid" id="grid">
 
-      <article class="card" data-name="PDFToolbox" data-category="Tools">
-        <div class="card-top"><div class="card-icon">▤</div><span class="card-number">01 / 10</span></div>
-        <div class="category">TOOLS & UTILITIES</div>
-        <h3>PDFToolbox</h3>
-        <p class="card-description">Useful PDF tools and document utilities in one place.</p>
-        <a class="visit" href="https://pdftoolbox.shop" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="PDFToolbox" data-category="Tools">
+          <div class="card-top">
+            <div class="card-icon">▤</div>
+            <span class="card-index">01</span>
+          </div>
+          <div class="category-badge">Tools & Utilities</div>
+          <h3>PDFToolbox</h3>
+          <p class="card-description">All-in-one document processing utilities to convert, merge, compress, and edit PDFs directly inside the browser.</p>
+          <a class="visit-btn" href="https://pdftoolbox.shop" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="Celebrity Buzz" data-category="Entertainment">
-        <div class="card-top"><div class="card-icon">✦</div><span class="card-number">02 / 10</span></div>
-        <div class="category">ENTERTAINMENT</div>
-        <h3>Celebrity Buzz</h3>
-        <p class="card-description">Celebrity updates, entertainment stories and trending buzz.</p>
-        <a class="visit" href="https://www.celebritybuzz.buzz/?m=1" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="Celebrity Buzz" data-category="Entertainment">
+          <div class="card-top">
+            <div class="card-icon">✦</div>
+            <span class="card-index">02</span>
+          </div>
+          <div class="category-badge">Entertainment</div>
+          <h3>Celebrity Buzz</h3>
+          <p class="card-description">Curated pop-culture hub delivering trending entertainment updates, celebrity spotlights, and digital news.</p>
+          <a class="visit-btn" href="https://www.celebritybuzz.buzz/?m=1" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="HisabPro" data-category="Business">
-        <div class="card-top"><div class="card-icon">₹</div><span class="card-number">03 / 10</span></div>
-        <div class="category">BUSINESS MANAGEMENT</div>
-        <h3>HisabPro</h3>
-        <p class="card-description">Manage sales, stock, customer khata and business records.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/hisabpro/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="HisabPro" data-category="Business">
+          <div class="card-top">
+            <div class="card-icon">₹</div>
+            <span class="card-index">03</span>
+          </div>
+          <div class="category-badge">Business & Khata</div>
+          <h3>HisabPro</h3>
+          <p class="card-description">Full-featured ledger solution for tracking accounts, inventory balance, credit lines, and customer records effortlessly.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/hisabpro/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="CalcPro" data-category="Tools">
-        <div class="card-top"><div class="card-icon">±</div><span class="card-number">04 / 10</span></div>
-        <div class="category">TOOLS & UTILITIES</div>
-        <h3>CalcPro</h3>
-        <p class="card-description">A handy calculator project for everyday calculations.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/calcpro/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="CalcPro" data-category="Tools">
+          <div class="card-top">
+            <div class="card-icon">±</div>
+            <span class="card-index">04</span>
+          </div>
+          <div class="category-badge">Tools & Utilities</div>
+          <h3>CalcPro</h3>
+          <p class="card-description">Modern lightweight numerical suite featuring instant calculations, responsive UI, and history tracking.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/calcpro/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="LabelPro" data-category="Business">
-        <div class="card-top"><div class="card-icon">▦</div><span class="card-number">05 / 10</span></div>
-        <div class="category">LABEL & BARCODE</div>
-        <h3>LabelPro</h3>
-        <p class="card-description">Design product labels and work with barcode tools.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/labelpro/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="LabelPro" data-category="Business">
+          <div class="card-top">
+            <div class="card-icon">▦</div>
+            <span class="card-index">05</span>
+          </div>
+          <div class="category-badge">Label & Barcode</div>
+          <h3>LabelPro</h3>
+          <p class="card-description">Precision barcode generation and multi-format thermal printing canvas designed for e-commerce dispatch workflows.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/labelpro/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="SK Player" data-category="Entertainment">
-        <div class="card-top"><div class="card-icon">▷</div><span class="card-number">06 / 10</span></div>
-        <div class="category">MEDIA & ENTERTAINMENT</div>
-        <h3>SK Player</h3>
-        <p class="card-description">Discover the SK Player media project.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/skplayer/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="SK Player" data-category="Entertainment">
+          <div class="card-top">
+            <div class="card-icon">▷</div>
+            <span class="card-index">06</span>
+          </div>
+          <div class="category-badge">Media & Entertainment</div>
+          <h3>SK Player</h3>
+          <p class="card-description">Cross-platform media player engineered for fluid video rendering, intuitive playlist control, and audio playback.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/skplayer/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="Vibe Wish" data-category="Creative">
-        <div class="card-top"><div class="card-icon">♡</div><span class="card-number">07 / 10</span></div>
-        <div class="category">CREATIVE EXPERIENCES</div>
-        <h3>Vibe Wish</h3>
-        <p class="card-description">Creative wishes and memorable greeting experiences.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/vibe-wish/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="Vibe Wish" data-category="Creative">
+          <div class="card-top">
+            <div class="card-icon">♡</div>
+            <span class="card-index">07</span>
+          </div>
+          <div class="category-badge">Creative Experiences</div>
+          <h3>Vibe Wish</h3>
+          <p class="card-description">Interactive celebratory greeting portal allowing users to create memorable, custom-animated wishes.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/vibe-wish/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="Universal Restaurant POS" data-category="Business">
-        <div class="card-top"><div class="card-icon">⌘</div><span class="card-number">08 / 10</span></div>
-        <div class="category">RESTAURANT SOFTWARE</div>
-        <h3>Universal Restaurant POS</h3>
-        <p class="card-description">A restaurant point-of-sale and management project.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="Universal Restaurant POS" data-category="Business">
+          <div class="card-top">
+            <div class="card-icon">⌘</div>
+            <span class="card-index">08</span>
+          </div>
+          <div class="category-badge">Restaurant Software</div>
+          <h3>Universal Restaurant POS</h3>
+          <p class="card-description">Fast, table-side billing and point-of-sale interface tailored for restaurants, cafes, and rapid order fulfillment.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="SK Logistics" data-category="Business">
-        <div class="card-top"><div class="card-icon">⇄</div><span class="card-number">09 / 10</span></div>
-        <div class="category">TRANSPORT MANAGEMENT</div>
-        <h3>SK Logistics</h3>
-        <p class="card-description">Transport bookings, logistics and business tracking.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/sk-logistics/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="SK Logistics" data-category="Business">
+          <div class="card-top">
+            <div class="card-icon">⇄</div>
+            <span class="card-index">09</span>
+          </div>
+          <div class="category-badge">Transport Management</div>
+          <h3>SK Logistics</h3>
+          <p class="card-description">Fleet management, transit booking, and consignment shipment status tracker built for freight operations.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/sk-logistics/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-      <article class="card" data-name="Fastgram" data-category="Social">
-        <div class="card-top"><div class="card-icon">◎</div><span class="card-number">10 / 10</span></div>
-        <div class="category">SOCIAL & DIGITAL</div>
-        <h3>Fastgram</h3>
-        <p class="card-description">Explore the Fastgram digital project.</p>
-        <a class="visit" href="https://sameerkhan86926-a11y.github.io/Fastgram/" target="_blank" rel="noopener noreferrer">Visit Website <span class="arrow">↗</span></a>
-      </article>
+        <article class="card" data-name="Fastgram" data-category="Social">
+          <div class="card-top">
+            <div class="card-icon">◎</div>
+            <span class="card-index">10</span>
+          </div>
+          <div class="category-badge">Social Media</div>
+          <h3>Fastgram</h3>
+          <p class="card-description">Next-generation social utility and media viewer client focusing on speed, clean feed aesthetics, and minimal latency.</p>
+          <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/Fastgram/" target="_blank" rel="noopener noreferrer">
+            Launch App
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+        </article>
 
-    </div>
+      </div>
 
-    <div class="empty" id="empty">No projects found. Try another search.</div>
-  </main>
+      <div class="empty-state" id="emptyState">
+        <p>No projects match your search or filter criteria.</p>
+      </div>
+    </main>
 
-  <footer>
-    <div class="footer-name">SAMEER</div>
-    <div class="footer-line"></div>
-    <p>Ideas into experiences.<br>© <span id="year"></span> SAMEER</p>
-  </footer>
-</div>
+    <footer>
+      <div class="footer-brand">SAMEER</div>
+      <div class="footer-divider"></div>
+      <p>© <span id="year"></span> Sameer. Crafted with focus & precision.</p>
+    </footer>
+  </div>
 
-<script>
-const search = document.getElementById("search");
-const cards = [...document.querySelectorAll(".card")];
-const filters = [...document.querySelectorAll(".filter")];
-const count = document.getElementById("count");
-const empty = document.getElementById("empty");
+  <script>
+    const searchInput = document.getElementById("search");
+    const cards = Array.from(document.querySelectorAll(".card"));
+    const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
+    const countDisplay = document.getElementById("count");
+    const emptyState = document.getElementById("emptyState");
+    const statProjects = document.getElementById("statProjects");
+    const statCategories = document.getElementById("statCategories");
+    const profileImg = document.getElementById("profileImg");
+    const avatarFallback = document.getElementById("avatarFallback");
 
-let activeFilter = "All";
+    let currentFilter = "All";
 
-function updateProjects() {
-  const query = search.value.toLowerCase().trim();
-  let visible = 0;
+    // Set dynamic total count and distinct categories count in Stats
+    if (statProjects) statProjects.textContent = cards.length;
+    if (statCategories) {
+      const uniqueCategories = new Set(cards.map(c => c.dataset.category));
+      statCategories.textContent = uniqueCategories.size;
+    }
 
-  cards.forEach(card => {
-    const text = (card.dataset.name + " " + card.innerText).toLowerCase();
-    const matchesSearch = text.includes(query);
-    const matchesFilter = activeFilter === "All" || card.dataset.category === activeFilter;
-    const show = matchesSearch && matchesFilter;
+    // Dynamic Filter & Search Handler
+    function filterCards() {
+      const query = searchInput.value.toLowerCase().trim();
+      let matchCount = 0;
 
-    card.style.display = show ? "flex" : "none";
-    if (show) visible++;
-  });
+      cards.forEach(card => {
+        const title = (card.dataset.name || "").toLowerCase();
+        const category = (card.dataset.category || "").toLowerCase();
+        const content = card.innerText.toLowerCase();
 
-  count.textContent = visible + (visible === 1 ? " website" : " websites");
-  empty.style.display = visible === 0 ? "block" : "none";
-}
+        const matchesQuery = query === "" || title.includes(query) || category.includes(query) || content.includes(query);
+        const matchesCategory = currentFilter === "All" || card.dataset.category === currentFilter;
 
-search.addEventListener("input", updateProjects);
+        const isVisible = matchesQuery && matchesCategory;
+        card.style.display = isVisible ? "flex" : "none";
 
-filters.forEach(button => {
-  button.addEventListener("click", () => {
-    activeFilter = button.dataset.filter;
-    filters.forEach(item => item.classList.toggle("active", item === button));
-    updateProjects();
-  });
-});
+        if (isVisible) matchCount++;
+      });
 
-document.getElementById("year").textContent = new Date().getFullYear();
+      countDisplay.textContent = `Showing ${matchCount} ${matchCount === 1 ? 'project' : 'projects'}`;
+      emptyState.style.display = matchCount === 0 ? "block" : "none";
+    }
 
-document.querySelector(".profile-photo").addEventListener("error", function() {
-  this.alt = "Profile photo could not be loaded";
-});
+    searchInput.addEventListener("input", filterCards);
 
-updateProjects();
-</script>
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        filterCards();
+      });
+    });
+
+    // Image Error Fallback Handler
+    profileImg.addEventListener("error", () => {
+      profileImg.style.display = "none";
+      avatarFallback.style.display = "flex";
+    });
+
+    // Dynamic Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Initial Trigger
+    filterCards();
+  </script>
 </body>
 </html>
