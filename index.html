@@ -18,7 +18,7 @@
       --card-bg: rgba(6, 17, 10, 0.75);
       --card-hover: rgba(9, 28, 16, 0.9);
       --matrix-green: #00ff66;
-      --green-glow: #00ff6633;
+      --green-glow: rgba(0, 255, 102, 0.25);
       --green-dark: #003b17;
       --green-dim: #059647;
       --text-main: #e2fced;
@@ -30,11 +30,20 @@
       --font-mono: 'Fira Code', monospace;
     }
 
+    /* Red Alarm Theme for Breach Simulation */
+    body.breach-mode {
+      --matrix-green: #ff003b !important;
+      --green-glow: rgba(255, 0, 59, 0.35) !important;
+      --green-dark: #45000f !important;
+      --border-bright: #ff003b !important;
+      --border: rgba(255, 0, 59, 0.3) !important;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      cursor: none; /* Replaced by custom cyber cursor */
+      cursor: none;
     }
 
     html {
@@ -49,9 +58,9 @@
       overflow-x: hidden;
       line-height: 1.6;
       position: relative;
+      transition: background 0.3s;
     }
 
-    /* Custom Crosshair Cursor */
     #cyberCursor {
       position: fixed;
       width: 24px;
@@ -83,7 +92,6 @@
       border-color: #fff;
     }
 
-    /* Matrix Rain Canvas */
     #matrixCanvas {
       position: fixed;
       top: 0;
@@ -95,7 +103,6 @@
       pointer-events: none;
     }
 
-    /* CRT Scanline Overlay */
     .scanlines {
       display: block;
       position: fixed;
@@ -116,7 +123,7 @@
     .container {
       width: min(100% - 32px, 1040px);
       margin: 0 auto;
-      padding-bottom: 50px;
+      padding-bottom: 60px;
       position: relative;
       z-index: 12;
     }
@@ -141,13 +148,20 @@
       padding: 6px 14px;
       border-radius: 4px;
       letter-spacing: 1.2px;
+      flex-wrap: wrap;
     }
 
     .telemetry-row span strong {
       color: #fff;
     }
 
-    .audio-hud-toggle {
+    .hud-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .hud-btn {
       background: rgba(0, 20, 8, 0.6);
       border: 1px solid var(--border);
       color: var(--matrix-green);
@@ -162,9 +176,19 @@
       transition: all 0.2s ease;
     }
 
-    .audio-hud-toggle:hover {
+    .hud-btn:hover {
       border-color: var(--matrix-green);
       box-shadow: 0 0 10px var(--green-glow);
+    }
+
+    .breach-btn {
+      color: #ff0055;
+      border-color: rgba(255, 0, 85, 0.4);
+    }
+    .breach-btn:hover {
+      background: #ff0055;
+      color: #fff;
+      box-shadow: 0 0 15px #ff0055;
     }
 
     .audio-dot {
@@ -181,15 +205,15 @@
       100% { opacity: 1; transform: scale(1.2); }
     }
 
-    .audio-hud-toggle.muted .audio-dot {
+    .hud-btn.muted .audio-dot {
       background: #ef4444;
       box-shadow: 0 0 8px #ef4444;
       animation: none;
     }
 
-    /* Terminal Header */
+    /* Hero */
     .hero {
-      padding: 45px 0 35px;
+      padding: 38px 0 24px;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -201,7 +225,7 @@
       position: relative;
       width: 140px;
       height: 140px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       z-index: 15;
     }
 
@@ -256,7 +280,7 @@
       font-weight: 600;
       letter-spacing: 2px;
       color: var(--matrix-green);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       background: rgba(0, 255, 102, 0.06);
       padding: 6px 18px;
       border-radius: 4px;
@@ -273,13 +297,11 @@
       animation: blink 1s steps(2, start) infinite;
     }
 
-    @keyframes blink {
-      to { visibility: hidden; }
-    }
+    @keyframes blink { to { visibility: hidden; } }
 
     .hero h1 {
       font-family: var(--font-display);
-      font-size: clamp(40px, 8vw, 76px);
+      font-size: clamp(38px, 8vw, 76px);
       font-weight: 900;
       letter-spacing: 6px;
       line-height: 1.1;
@@ -300,12 +322,66 @@
       font-weight: 600;
     }
 
+    /* Contact Nodes Under Bio */
+    .contact-nodes {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .node-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      background: rgba(0, 20, 8, 0.5);
+      font-size: 10px;
+      color: var(--matrix-green);
+      border-radius: 4px;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+
+    .node-chip:hover {
+      border-color: var(--matrix-green);
+      box-shadow: 0 0 10px var(--green-glow);
+      background: rgba(0, 255, 102, 0.1);
+    }
+
+    /* Live Telemetry Ticker Bar */
+    .ticker-bar {
+      margin: 24px 0 28px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 15, 6, 0.6);
+      padding: 8px 14px;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      font-size: 11px;
+      color: var(--matrix-green);
+      letter-spacing: 1.5px;
+    }
+
+    .ticker-content {
+      display: inline-block;
+      animation: tickerRun 25s linear infinite;
+    }
+
+    @keyframes tickerRun {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
     /* Stats Terminal */
     .stats {
       display: flex;
       justify-content: center;
       gap: 14px;
-      margin: 30px 0 40px;
+      margin: 0 0 35px;
       flex-wrap: wrap;
     }
 
@@ -348,7 +424,7 @@
       margin-top: 3px;
     }
 
-    /* Search & Filter Toolbar */
+    /* Search & Filter */
     .toolbar-header {
       display: flex;
       justify-content: space-between;
@@ -548,7 +624,7 @@
 
     .card-actions {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
       width: 100%;
     }
@@ -558,16 +634,16 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 10px 14px;
+      gap: 8px;
+      padding: 10px 12px;
       border-radius: 4px;
       background: rgba(0, 255, 102, 0.1);
       border: 1px solid var(--border-bright);
       color: var(--matrix-green);
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       transition: all 0.25s ease;
     }
@@ -589,19 +665,19 @@
       transform: translate(3px, -3px);
     }
 
-    .copy-btn {
-      padding: 10px 12px;
+    .action-sub-btn {
+      padding: 10px 10px;
       background: rgba(0, 20, 8, 0.6);
       border: 1px solid var(--border);
       border-radius: 4px;
       color: var(--matrix-green);
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       transition: all 0.2s ease;
     }
 
-    .copy-btn:hover {
+    .action-sub-btn:hover {
       border-color: var(--matrix-green);
       box-shadow: 0 0 10px var(--green-glow);
       background: rgba(0, 255, 102, 0.15);
@@ -619,7 +695,7 @@
       letter-spacing: 1px;
     }
 
-    /* CLI Floating Trigger Button */
+    /* Floating CLI Fab Button */
     .cli-fab {
       position: fixed;
       bottom: 24px;
@@ -647,13 +723,13 @@
       box-shadow: 0 0 30px var(--matrix-green);
     }
 
-    /* CLI Overlay Window */
+    /* CLI Modal Window */
     .cli-modal {
       position: fixed;
       bottom: 80px;
       right: 24px;
-      width: min(100% - 48px, 460px);
-      height: 380px;
+      width: min(100% - 48px, 480px);
+      height: 400px;
       background: rgba(2, 10, 5, 0.95);
       border: 1px solid var(--border-bright);
       border-radius: 8px;
@@ -721,6 +797,42 @@
       outline: none;
     }
 
+    /* Live Preview HUD Modal */
+    .preview-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(92vw, 840px);
+      height: min(85vh, 580px);
+      background: rgba(2, 10, 5, 0.97);
+      border: 2px solid var(--border-bright);
+      border-radius: 8px;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), 0 0 30px var(--green-glow);
+      backdrop-filter: blur(15px);
+    }
+
+    .preview-header {
+      padding: 10px 16px;
+      background: rgba(0, 255, 102, 0.1);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--matrix-green);
+    }
+
+    .preview-frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+
     /* Copied Toast Banner */
     .toast-banner {
       position: fixed;
@@ -766,7 +878,7 @@
 
     @media (max-width: 650px) {
       .grid { grid-template-columns: 1fr; }
-      .hero { padding: 35px 0 20px; }
+      .hero { padding: 30px 0 15px; }
       .photo-wrapper { width: 120px; height: 120px; }
       .hero h1 { letter-spacing: 3px; }
       .stat-card { min-width: 90px; padding: 10px; }
@@ -797,14 +909,16 @@
         <span>UTC: <strong id="clockUtc">00:00:00</strong></span>
         <span>IST: <strong id="clockIst">00:00:00</strong></span>
         <span>LATENCY: <strong id="hudPing">18ms</strong></span>
-        <span>MEM: <strong id="hudMem">48MB</strong></span>
+        <span>SEC_LEVEL: <strong>0x7F</strong></span>
       </div>
 
-      <!-- Sound Effect Toggle Button -->
-      <button class="audio-hud-toggle" id="audioToggle">
-        <span class="audio-dot"></span>
-        <span id="audioText">AUDIO: ON</span>
-      </button>
+      <div class="hud-buttons">
+        <button class="hud-btn breach-btn" id="breachBtn" title="Simulate System Intrusion">[SYS_BREACH]</button>
+        <button class="hud-btn" id="audioToggle">
+          <span class="audio-dot"></span>
+          <span id="audioText">AUDIO: ON</span>
+        </button>
+      </div>
     </div>
 
     <header class="hero">
@@ -833,6 +947,22 @@
         <strong>[0x01] Mind. [0x0A] Nodes Deployed.</strong>
       </p>
 
+      <!-- Contact Nodes -->
+      <div class="contact-nodes">
+        <a href="https://github.com/sameerkhan86926-a11y" target="_blank" class="node-chip">[GITHUB_NODE]</a>
+        <a href="https://instagram.com" target="_blank" class="node-chip">[INSTA_NODE]</a>
+        <a href="mailto:contact@sameer.dev" class="node-chip">[PGP_MAIL]</a>
+      </div>
+    </header>
+
+    <!-- Live Telemetry Ticker Bar -->
+    <div class="ticker-bar">
+      <div class="ticker-content" id="tickerMsg">
+        [SYS_LOG: 16:35:10] FASTGRAM V2 ONLINE | PDFTOOLBOX ENGINE: HEALTHY | HISABPRO LEDGER SYNC: OK | TRAFFIC: 0x98A PACKETS/SEC | FIREWALL: ACTIVE | LATENCY: 18ms
+      </div>
+    </div>
+
+    <main>
       <div class="stats">
         <div class="stat-card">
           <strong id="statProjects">10</strong>
@@ -847,9 +977,7 @@
           <span>STATUS: 200 OK</span>
         </div>
       </div>
-    </header>
 
-    <main>
       <div class="toolbar-header">
         <h2>ACTIVE <span>PAYLOADS & APPS</span></h2>
         <span class="project-counter" id="count">INITIALIZING...</span>
@@ -881,10 +1009,11 @@
           <p class="card-description">High-performance document processing suite. Convert, inject, parse and compress PDF byte buffers client-side.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://pdftoolbox.shop" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -898,10 +1027,11 @@
           <p class="card-description">Decentralized pop-culture feed interceptor parsing real-time entertainment bulletins and viral highlights.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://www.celebritybuzz.buzz/?m=1" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -915,10 +1045,11 @@
           <p class="card-description">Cryptographic accounting ledger for balancing khata credits, enterprise stock inventory, and multi-tenant billing.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/hisabpro/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -932,10 +1063,11 @@
           <p class="card-description">Micro-footprint numerical processor for instant arithmetic pipelines and scientific evaluation scripts.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/calcpro/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -949,10 +1081,11 @@
           <p class="card-description">Industrial-grade thermal print engine and dynamic barcode generator compiled for supply-chain dispatch.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/labelpro/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -966,10 +1099,11 @@
           <p class="card-description">Low-latency media stream renderer engineered for seamless audio/video packet playback across modern viewports.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/skplayer/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -983,10 +1117,11 @@
           <p class="card-description">Interactive celebratory DOM generator delivering custom reactive animations and digital greeting transmissions.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/vibe-wish/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -1000,10 +1135,11 @@
           <p class="card-description">Fast-checkout transaction engine designed for dining spaces, KOT automation, and rapid invoice synthesis.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/universal-restaurant-pos/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -1017,10 +1153,11 @@
           <p class="card-description">Telemetry fleet tracker and transit manifest coordinator optimized for multi-location consignment dispatches.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/sk-logistics/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -1034,10 +1171,11 @@
           <p class="card-description">Ultra-responsive social viewer client engineered for lightweight DOM rendering and rapid feed ingestion.</p>
           <div class="card-actions">
             <a class="visit-btn" href="https://sameerkhan86926-a11y.github.io/Fastgram/" target="_blank" rel="noopener noreferrer">
-              EXECUTE LINK
+              EXECUTE
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
             </a>
-            <button class="copy-btn" title="Copy URL Hash">[CPY]</button>
+            <button class="action-sub-btn preview-btn" title="Live Preview">[PRV]</button>
+            <button class="action-sub-btn copy-btn" title="Copy URL">[CPY]</button>
           </div>
         </article>
 
@@ -1053,16 +1191,25 @@
 
     <div class="cli-modal" id="cliModal">
       <div class="cli-header">
-        <span>ROOT_SHELL://v2.4.0</span>
+        <span>ROOT_SHELL://v3.1.0</span>
         <button class="cli-close" id="cliCloseBtn">✕</button>
       </div>
       <div class="cli-body" id="cliBody">
-        <div>SYSTEM SECURE. Type <strong>help</strong> to list available commands.</div>
+        <div>SYSTEM SECURE. Type <strong>help</strong> for hacker command index.</div>
       </div>
       <div class="cli-input-line">
         <span>root@node:~$</span>
         <input type="text" class="cli-input" id="cliInput" placeholder="Enter command..." autocomplete="off">
       </div>
+    </div>
+
+    <!-- Live Preview Modal -->
+    <div class="preview-modal" id="previewModal">
+      <div class="preview-header">
+        <span id="previewTitle">HUD_PREVIEW://</span>
+        <button class="cli-close" id="previewCloseBtn">✕</button>
+      </div>
+      <iframe class="preview-frame" id="previewFrame" src="about:blank"></iframe>
     </div>
 
     <footer>
@@ -1072,7 +1219,7 @@
   </div>
 
   <script>
-    /* ================= 1. CUSTOM PRECISION CROSSHAIR ================= */
+    /* ================= 1. CROSSHAIR & HOVER BINDING ================= */
     const cursor = document.getElementById('cyberCursor');
     window.addEventListener('mousemove', (e) => {
       cursor.style.left = e.clientX + 'px';
@@ -1080,8 +1227,7 @@
     });
 
     function bindHoverElements() {
-      const interactives = document.querySelectorAll('button, a, input, .card');
-      interactives.forEach(el => {
+      document.querySelectorAll('button, a, input, .card').forEach(el => {
         el.addEventListener('mouseenter', () => cursor.classList.add('active'));
         el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
       });
@@ -1092,13 +1238,11 @@
     function updateHUD() {
       const now = new Date();
       document.getElementById('clockUtc').textContent = now.toUTCString().split(' ')[4];
-      
       const istOptions = { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
       document.getElementById('clockIst').textContent = new Intl.DateTimeFormat('en-GB', istOptions).format(now);
 
-      // Random jitter for simulation
       if (Math.random() > 0.6) {
-        document.getElementById('hudPing').textContent = Math.floor(16 + Math.random() * 12) + 'ms';
+        document.getElementById('hudPing').textContent = Math.floor(14 + Math.random() * 12) + 'ms';
       }
     }
     setInterval(updateHUD, 1000);
@@ -1123,7 +1267,6 @@
       }, 30);
     }
 
-    // Auto-trigger scramble on load and hover
     window.addEventListener('DOMContentLoaded', () => {
       decryptScramble(document.getElementById('decryptTitle'));
       document.querySelectorAll('.scramble-title').forEach(el => decryptScramble(el));
@@ -1136,7 +1279,7 @@
       });
     });
 
-    /* ================= 4. AUDIO SYNTHESIZER ENGINE ================= */
+    /* ================= 4. SOUND ENGINE & SFX ================= */
     let audioEnabled = true;
     let audioCtx = null;
     let droneGain = null;
@@ -1206,6 +1349,10 @@
       click: () => playTone(540, 'triangle', 0.06, 0.06),
       type: () => playTone(600 + Math.random() * 200, 'square', 0.02, 0.015),
       copy: () => playTone(1200, 'sine', 0.1, 0.07),
+      alarm: () => {
+        playTone(350, 'sawtooth', 0.3, 0.12);
+        setTimeout(() => playTone(250, 'sawtooth', 0.3, 0.12), 200);
+      },
       launch: () => {
         if (!audioEnabled) return;
         initAudio();
@@ -1249,7 +1396,36 @@
     window.addEventListener('click', initAudio, { once: true });
     window.addEventListener('keydown', initAudio, { once: true });
 
-    /* ================= 5. COPY PAYLOAD FEEDBACK ================= */
+    /* ================= 5. BREACH INTRUSION SIMULATOR ================= */
+    const breachBtn = document.getElementById('breachBtn');
+    let breachActive = false;
+
+    breachBtn.addEventListener('click', () => {
+      if (breachActive) return;
+      breachActive = true;
+      document.body.classList.add('breach-mode');
+      CyberSound.alarm();
+
+      const toast = document.getElementById('toastBanner');
+      toast.textContent = "⚠ WARNING: CRITICAL FIREWALL BREACH DETECTED";
+      toast.classList.add('show');
+
+      let flashes = 0;
+      const alarmLoop = setInterval(() => {
+        CyberSound.alarm();
+        flashes++;
+        if (flashes >= 4) {
+          clearInterval(alarmLoop);
+          setTimeout(() => {
+            document.body.classList.remove('breach-mode');
+            toast.classList.remove('show');
+            breachActive = false;
+          }, 1000);
+        }
+      }, 700);
+    });
+
+    /* ================= 6. COPY PAYLOAD FEEDBACK ================= */
     const toast = document.getElementById('toastBanner');
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -1265,7 +1441,30 @@
       });
     });
 
-    /* ================= 6. INTERACTIVE CLI TERMINAL ================= */
+    /* ================= 7. LIVE HUD PREVIEW MODAL ================= */
+    const previewModal = document.getElementById('previewModal');
+    const previewFrame = document.getElementById('previewFrame');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewCloseBtn = document.getElementById('previewCloseBtn');
+
+    document.querySelectorAll('.preview-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.card');
+        previewTitle.textContent = `HUD_PREVIEW:// ${card.dataset.name.toUpperCase()}`;
+        previewFrame.src = card.dataset.url;
+        previewModal.style.display = 'flex';
+        CyberSound.launch();
+      });
+    });
+
+    previewCloseBtn.addEventListener('click', () => {
+      previewModal.style.display = 'none';
+      previewFrame.src = 'about:blank';
+      CyberSound.click();
+    });
+
+    /* ================= 8. ADVANCED INTERACTIVE CLI TERMINAL ================= */
     const cliToggleBtn = document.getElementById('cliToggleBtn');
     const cliModal = document.getElementById('cliModal');
     const cliCloseBtn = document.getElementById('cliCloseBtn');
@@ -1289,7 +1488,7 @@
       line.innerHTML = `<span style="color:var(--matrix-green)">root@node:~$</span> ${cmd}`;
       const res = document.createElement('div');
       res.style.color = 'var(--text-muted)';
-      res.style.marginBottom = '6px';
+      res.style.marginBottom = '8px';
       res.innerHTML = output;
       cliBody.appendChild(line);
       cliBody.appendChild(res);
@@ -1298,7 +1497,8 @@
 
     cliInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const cmd = cliInput.value.trim().toLowerCase();
+        const fullCmd = cliInput.value.trim();
+        const cmd = fullCmd.toLowerCase();
         cliInput.value = '';
         CyberSound.click();
 
@@ -1310,39 +1510,105 @@
         }
 
         if (cmd === 'help') {
-          appendCLIPrompt(cmd, `
-            <strong>help</strong> - List commands<br>
-            <strong>list</strong> - List deployed project nodes<br>
+          appendCLIPrompt(fullCmd, `
+            <strong>help</strong> - Command index<br>
+            <strong>list</strong> - List deployed nodes<br>
             <strong>open &lt;name&gt;</strong> - Launch node (e.g. open pdftoolbox)<br>
-            <strong>about</strong> - Creator fingerprint info<br>
-            <strong>clear</strong> - Purge buffer
+            <strong>preview &lt;name&gt;</strong> - HUD preview (e.g. preview calcpro)<br>
+            <strong>ping &lt;name&gt;</strong> - Packet ping telemetry<br>
+            <strong>theme &lt;red|cyan|amber|green&gt;</strong> - Switch UI frequency<br>
+            <strong>matrix &lt;on|off|fast&gt;</strong> - Control rain canvas<br>
+            <strong>cat skills</strong> - Creator tech matrix<br>
+            <strong>about</strong> - Developer fingerprint<br>
+            <strong>sudo ...</strong> - Privileged root execution
           `);
         } else if (cmd === 'list') {
           const names = Array.from(document.querySelectorAll('.card')).map(c => c.dataset.name).join(', ');
-          appendCLIPrompt(cmd, `DEPLOYED NODES: [ ${names} ]`);
+          appendCLIPrompt(fullCmd, `DEPLOYED NODES: [ ${names} ]`);
         } else if (cmd.startsWith('open ')) {
           const target = cmd.replace('open ', '').trim();
           const card = Array.from(document.querySelectorAll('.card')).find(c => c.dataset.name.toLowerCase().includes(target));
           if (card) {
-            appendCLIPrompt(cmd, `EXECUTING: ${card.dataset.name}...`);
+            appendCLIPrompt(fullCmd, `LAUNCHING NODE: ${card.dataset.name}...`);
             CyberSound.launch();
             window.open(card.dataset.url, '_blank');
           } else {
-            appendCLIPrompt(cmd, `<span style="color:#ef4444">[ERROR]: Node '${target}' not found.</span>`);
+            appendCLIPrompt(fullCmd, `<span style="color:#ef4444">[ERROR]: Node '${target}' not found.</span>`);
           }
+        } else if (cmd.startsWith('preview ')) {
+          const target = cmd.replace('preview ', '').trim();
+          const card = Array.from(document.querySelectorAll('.card')).find(c => c.dataset.name.toLowerCase().includes(target));
+          if (card) {
+            previewTitle.textContent = `HUD_PREVIEW:// ${card.dataset.name.toUpperCase()}`;
+            previewFrame.src = card.dataset.url;
+            previewModal.style.display = 'flex';
+            appendCLIPrompt(fullCmd, `HUD STREAM INITIALIZED FOR ${card.dataset.name}.`);
+          } else {
+            appendCLIPrompt(fullCmd, `<span style="color:#ef4444">[ERROR]: Node '${target}' not found.</span>`);
+          }
+        } else if (cmd.startsWith('ping ')) {
+          const target = cmd.replace('ping ', '').trim();
+          appendCLIPrompt(fullCmd, `PING ${target} (127.0.0.1): 56 data bytes<br>64 bytes from root: icmp_seq=1 ttl=64 time=14.8 ms<br>64 bytes from root: icmp_seq=2 ttl=64 time=17.2 ms<br>--- ${target} ping statistics: 0% packet loss ---`);
+        } else if (cmd.startsWith('theme ')) {
+          const color = cmd.replace('theme ', '').trim();
+          if (color === 'red') {
+            document.documentElement.style.setProperty('--matrix-green', '#ff003b');
+            document.documentElement.style.setProperty('--border-bright', '#ff003b');
+            appendCLIPrompt(fullCmd, `UI THEME SHIFTED: BLOOD_RED`);
+          } else if (color === 'cyan') {
+            document.documentElement.style.setProperty('--matrix-green', '#00f0ff');
+            document.documentElement.style.setProperty('--border-bright', '#00f0ff');
+            appendCLIPrompt(fullCmd, `UI THEME SHIFTED: TRON_CYAN`);
+          } else if (color === 'amber') {
+            document.documentElement.style.setProperty('--matrix-green', '#ffb703');
+            document.documentElement.style.setProperty('--border-bright', '#ffb703');
+            appendCLIPrompt(fullCmd, `UI THEME SHIFTED: RETRO_AMBER`);
+          } else {
+            document.documentElement.style.setProperty('--matrix-green', '#00ff66');
+            document.documentElement.style.setProperty('--border-bright', '#00ff66');
+            appendCLIPrompt(fullCmd, `UI THEME RESTORED: MATRIX_GREEN`);
+          }
+        } else if (cmd.startsWith('matrix ')) {
+          const state = cmd.replace('matrix ', '').trim();
+          if (state === 'off') {
+            document.getElementById('matrixCanvas').style.display = 'none';
+            appendCLIPrompt(fullCmd, `MATRIX CANVAS TERMINATED.`);
+          } else if (state === 'fast') {
+            matrixIntervalSpeed = 15;
+            resetMatrixInterval();
+            appendCLIPrompt(fullCmd, `MATRIX FREQUENCY ACCELERATED.`);
+          } else {
+            document.getElementById('matrixCanvas').style.display = 'block';
+            matrixIntervalSpeed = 45;
+            resetMatrixInterval();
+            appendCLIPrompt(fullCmd, `MATRIX RAIN ACTIVE.`);
+          }
+        } else if (cmd === 'cat skills') {
+          appendCLIPrompt(fullCmd, `
+            [TECH MATRIX]:<br>
+            • CORE: JavaScript / TypeScript / Node.js<br>
+            • FRONTEND: Next.js / Tailwind CSS / Cordova<br>
+            • BACKEND: Supabase / Cloudflare / REST APIs<br>
+            • AUTOMATION: GitHub CI/CD Workflows / Python<br>
+            • SYSTEMS: POS, E-Commerce, Barcode & Tooling
+          `);
+        } else if (cmd.startsWith('sudo ')) {
+          appendCLIPrompt(fullCmd, `<span style="color:#ef4444">[SECURITY RISK]: User is not in the sudoers file. This incident has been logged.</span>`);
         } else if (cmd === 'about') {
-          appendCLIPrompt(cmd, `IDENTITY: SAMEER<br>SYSTEM: Digital Universe Architect<br>STATUS: 10 Nodes Online`);
+          appendCLIPrompt(fullCmd, `IDENTITY: SAMEER<br>SYSTEM: Digital Universe Architect<br>DEPLOYMENT: 10 Operational Web Nodes`);
         } else {
-          appendCLIPrompt(cmd, `<span style="color:#ef4444">Command not recognized: '${cmd}'. Type 'help'.</span>`);
+          appendCLIPrompt(fullCmd, `<span style="color:#ef4444">Command not recognized: '${fullCmd}'. Type 'help'.</span>`);
         }
       } else {
         CyberSound.type();
       }
     });
 
-    /* ================= 7. MATRIX RAIN EFFECT ================= */
+    /* ================= 9. MATRIX RAIN EFFECT ================= */
     const canvas = document.getElementById('matrixCanvas');
     const ctx = canvas.getContext('2d');
+    let matrixIntervalSpeed = 45;
+    let matrixInterval = null;
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -1359,7 +1625,7 @@
     function drawMatrix() {
       ctx.fillStyle = 'rgba(3, 7, 4, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00ff66';
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--matrix-green').trim() || '#00ff66';
       ctx.font = fontSize + 'px monospace';
 
       for (let i = 0; i < drops.length; i++) {
@@ -1372,9 +1638,14 @@
         drops[i]++;
       }
     }
-    setInterval(drawMatrix, 45);
 
-    /* ================= 8. TERMINAL SEARCH & FILTER LOGIC ================= */
+    function resetMatrixInterval() {
+      if (matrixInterval) clearInterval(matrixInterval);
+      matrixInterval = setInterval(drawMatrix, matrixIntervalSpeed);
+    }
+    resetMatrixInterval();
+
+    /* ================= 10. SEARCH & FILTER LOGIC ================= */
     const searchInput = document.getElementById("search");
     const cards = Array.from(document.querySelectorAll(".card"));
     const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
