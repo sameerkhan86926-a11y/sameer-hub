@@ -62,7 +62,7 @@
       pointer-events: none;
     }
 
-    /* CRT Scanline Overlay - Yeh ab profile photo ke upar nahi aayega */
+    /* CRT Scanline Overlay */
     .scanlines {
       display: block;
       position: fixed;
@@ -85,7 +85,46 @@
       margin: 0 auto;
       padding-bottom: 50px;
       position: relative;
-      z-index: 12; /* Scanlines (z-index 10) ke upar rakha hai taaki click/view clear rahe */
+      z-index: 12;
+    }
+
+    /* Audio Toggle Control */
+    .audio-hud-toggle {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      background: rgba(0, 20, 8, 0.6);
+      border: 1px solid var(--border);
+      color: var(--matrix-green);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      z-index: 20;
+    }
+
+    .audio-hud-toggle:hover {
+      border-color: var(--matrix-green);
+      box-shadow: 0 0 10px var(--green-glow);
+    }
+
+    .audio-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--matrix-green);
+      box-shadow: 0 0 8px var(--matrix-green);
+    }
+
+    .audio-hud-toggle.muted .audio-dot {
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
     }
 
     /* Terminal Header */
@@ -95,6 +134,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
 
     .photo-wrapper {
@@ -102,7 +142,7 @@
       width: 140px;
       height: 140px;
       margin-bottom: 24px;
-      z-index: 15; /* Scanlines se bilkul upar clear visibility ke liye */
+      z-index: 15;
     }
 
     .photo-ring {
@@ -124,8 +164,7 @@
       display: block;
       background: #020b05;
       border: 3px solid var(--bg);
-      /* Kisi bhi tarah ka filter ya scanline hata diya hai taaki face bilkul clean dikhe */
-      filter: none; 
+      filter: none;
     }
 
     .avatar-fallback {
@@ -149,7 +188,6 @@
       100% { filter: hue-rotate(360deg); }
     }
 
-    /* Terminal HUD prompt */
     .terminal-status {
       display: inline-flex;
       align-items: center;
@@ -523,6 +561,7 @@
       .photo-wrapper { width: 120px; height: 120px; }
       .hero h1 { letter-spacing: 3px; }
       .stat-card { min-width: 90px; padding: 10px; }
+      .audio-hud-toggle { top: 12px; font-size: 9px; padding: 4px 10px; }
     }
   </style>
 </head>
@@ -531,10 +570,17 @@
   <!-- Live Matrix Canvas Background -->
   <canvas id="matrixCanvas"></canvas>
 
-  <!-- CRT Scanline overlay (Ab container ke niche hai taaki photo par lines na aaye) -->
+  <!-- CRT Scanline overlay -->
   <div class="scanlines"></div>
 
   <div class="container">
+    
+    <!-- Sound Effect Toggle Button -->
+    <button class="audio-hud-toggle" id="audioToggle">
+      <span class="audio-dot"></span>
+      <span id="audioText">AUDIO: ON</span>
+    </button>
+
     <header class="hero">
       <div class="photo-wrapper">
         <div class="photo-ring">
@@ -753,6 +799,75 @@
   </div>
 
   <script>
+    /* ================= LIVE SOUND SYNTHESIZER (WEB AUDIO API) ================= */
+    let audioEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Play synthesized cyber tone
+    function playTone(freq, type = 'sine', duration = 0.05, vol = 0.08) {
+      if (!audioEnabled) return;
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    // Sound presets
+    const CyberSound = {
+      hover: () => playTone(880, 'sine', 0.04, 0.03), // subtle high blip
+      click: () => playTone(540, 'triangle', 0.06, 0.07), // mechanical tap
+      type: () => playTone(600 + Math.random() * 200, 'square', 0.02, 0.015), // typing click
+      launch: () => {
+        if (!audioEnabled) return;
+        initAudio();
+        try {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(250, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.18);
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.2);
+        } catch(e) {}
+      }
+    };
+
+    // Toggle Audio button
+    const audioToggle = document.getElementById('audioToggle');
+    const audioText = document.getElementById('audioText');
+    audioToggle.addEventListener('click', () => {
+      audioEnabled = !audioEnabled;
+      audioToggle.classList.toggle('muted', !audioEnabled);
+      audioText.textContent = audioEnabled ? 'AUDIO: ON' : 'AUDIO: OFF';
+      if (audioEnabled) CyberSound.click();
+    });
+
     /* ================= MATRIX CANVAS EFFECT ================= */
     const canvas = document.getElementById('matrixCanvas');
     const ctx = canvas.getContext('2d');
@@ -788,7 +903,7 @@
     }
     setInterval(drawMatrix, 45);
 
-    /* ================= TERMINAL FILTER LOGIC ================= */
+    /* ================= TERMINAL FILTER LOGIC + AUDIO HOOKS ================= */
     const searchInput = document.getElementById("search");
     const cards = Array.from(document.querySelectorAll(".card"));
     const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
@@ -829,15 +944,31 @@
       emptyState.style.display = matchCount === 0 ? "block" : "none";
     }
 
-    searchInput.addEventListener("input", filterCards);
+    // Input Sound Event
+    searchInput.addEventListener("input", () => {
+      CyberSound.type();
+      filterCards();
+    });
 
+    // Buttons sound events
     filterButtons.forEach(btn => {
+      btn.addEventListener("mouseenter", CyberSound.hover);
       btn.addEventListener("click", () => {
+        CyberSound.click();
         filterButtons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentFilter = btn.dataset.filter;
         filterCards();
       });
+    });
+
+    // Cards & launch button sound events
+    cards.forEach(card => {
+      card.addEventListener("mouseenter", CyberSound.hover);
+      const visitBtn = card.querySelector(".visit-btn");
+      if (visitBtn) {
+        visitBtn.addEventListener("click", CyberSound.launch);
+      }
     });
 
     profileImg.addEventListener("error", () => {
